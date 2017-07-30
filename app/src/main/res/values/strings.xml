@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">NFLSeasonCalculatorApp</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="set_all_team_settings">Set All Teams\' Matchups Using:</string>
+    <string name="select_team">Select Team</string>
+
+    <string name="save_teams_to_file">Save Current Team Settings to Memory</string>
+
+    <!-- Selected Team Strings -->
+    <string name="power_ranking">Power Ranking</string>
+    <string name="elo_rating">Elo Rating</string>
+    <string name="home_field_advantage">Home Field Advantage</string>
+
+    <string name="save_team_settings">Save Settings and Refresh Matchups</string>
+
+    <string name="matchups">Matchups</string>
+    <string name="opponent">Opponent</string>
+    <string name="neutral_chance">Neutral</string>
+    <string name="home_chance">Home</string>
+    <string name="away_chance">Away</string>
+    <string name="win_chance_mode">Mode</string>
+
+    <string name="set_all_label">Set All Matchups Using:</string>
+    <string name="power_ranking_all">Power Rankings</string>
+    <string name="elo_rating_all">Elo Ratings</string>
+    <string name="home_field_advantage_all">Home Field Advantage</string>
+
+    <string name="custom_win_mode">C</string>
+    <string name="power_rankings_win_mode">P</string>
+    <string name="elo_ratings_win_mode">E</string>
+    <string-array name="neutral_mode_array">
+        <item>@string/custom_win_mode</item>
+        <item>@string/power_rankings_win_mode</item>
+        <item>@string/elo_ratings_win_mode</item>
+    </string-array>
+
+    <string name="home_field_advantage_mode">H</string>
+    <string-array name="home_mode_array">
+        <item>@string/custom_win_mode</item>
+        <item>@string/home_field_advantage_mode</item>
+    </string-array>
+
+    <string name="back">Back</string>
+    <string name="save_and_back">Save and Back</string>
+
+    <plurals name="display_number">
+        <item quantity="other">%d</item>
+    </plurals>
+</resources>

@@ -1,0 +1,82 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="season.nfl.nflseasoncalculatorapp.fragments.AllTeamsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/saveTeamSettingsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_teams_to_file" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/teams_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/setAllLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_all_team_settings"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:id="@+id/setAllTeamsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_border"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/powerRankingsButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/power_ranking_all" />
+
+                    <Button
+                        android:id="@+id/eloRatingsButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/elo_rating_all" />
+
+                    <Button
+                        android:id="@+id/homeFieldButton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/home_field_advantage_all" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/selectTeamLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_team"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:id="@+id/teams_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"></LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</FrameLayout>
