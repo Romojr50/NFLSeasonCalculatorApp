@@ -22,6 +22,7 @@ import java.util.List;
 import nfl.season.input.NFLFileReaderFactory;
 import nfl.season.input.NFLTeamSettings;
 import nfl.season.league.League;
+import nfl.season.playoffs.NFLPlayoffs;
 import season.nfl.nflseasoncalculatorapp.fragments.AllTeamsFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.PlayoffsFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.SeasonFragment;
@@ -123,7 +124,10 @@ public class MainActivity extends AppCompatActivity
     private void setUpAdapter(ViewPagerAdapter adapter, League nfl) {
         TeamsFragment teamsFragment = TeamsFragment.newInstance(nfl, null);
         SeasonFragment seasonFragment = new SeasonFragment();
-        PlayoffsFragment playoffsFragment = new PlayoffsFragment();
+
+        NFLPlayoffs playoffs = new NFLPlayoffs(nfl);
+        playoffs.initializeNFLPlayoffs();
+        PlayoffsFragment playoffsFragment = PlayoffsFragment.newInstance(nfl, playoffs);
 
         adapter.addFragment(teamsFragment, "Teams");
         adapter.addFragment(seasonFragment, "Season");

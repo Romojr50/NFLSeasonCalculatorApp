@@ -1,13 +1,24 @@
 package season.nfl.nflseasoncalculatorapp.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.util.List;
+
+import nfl.season.league.Conference;
+import nfl.season.league.League;
+import nfl.season.playoffs.NFLPlayoffConference;
+import nfl.season.playoffs.NFLPlayoffs;
+import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
 
 /**
@@ -19,14 +30,12 @@ import season.nfl.nflseasoncalculatorapp.R;
  * create an instance of this fragment.
  */
 public class PlayoffsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String PLAYOFFS_KEY = "NFL Playoffs";
+
+    private League nfl;
+
+    private NFLPlayoffs playoffs;
 
     private OnFragmentInteractionListener mListener;
 
@@ -38,16 +47,15 @@ public class PlayoffsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param nfl League
      * @return A new instance of fragment PlayoffsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PlayoffsFragment newInstance(String param1, String param2) {
+    public static PlayoffsFragment newInstance(League nfl, NFLPlayoffs playoffs) {
         PlayoffsFragment fragment = new PlayoffsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(MainActivity.LEAGUE_KEY, nfl);
+        args.putSerializable(PLAYOFFS_KEY, playoffs);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +64,8 @@ public class PlayoffsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            nfl = (League) getArguments().getSerializable(MainActivity.LEAGUE_KEY);
+            playoffs = (NFLPlayoffs) getArguments().getSerializable(PLAYOFFS_KEY);
         }
     }
 
@@ -72,6 +80,27 @@ public class PlayoffsFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
+        Activity activity = getActivity();
+
+        LinearLayout selectPlayoffTeamsLayout = (LinearLayout) view.findViewById(R.id.selectPlayoffTeamsLayout);
+
+        List<NFLPlayoffConference> playoffConferences = playoffs.getConferences();
+        for (NFLPlayoffConference playoffconference : playoffConferences) {
+            Conference leagueConference = playoffconference.getConference();
+            String conferenceName = leagueConference.getName();
+
+            LinearLayout conferenceLayout = new LinearLayout(activity);
+
+            TextView conferenceLabel = new TextView(activity);
+            conferenceLabel.setText(conferenceName);
+            conferenceLayout.addView(conferenceLabel);
+
+            selectPlayoffTeamsLayout.addView(conferenceLayout);
         }
     }
 
