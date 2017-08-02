@@ -27,6 +27,9 @@ import nfl.season.playoffs.NFLPlayoffConference;
 import nfl.season.playoffs.NFLPlayoffs;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
+import season.nfl.nflseasoncalculatorapp.input.ConferenceTable;
+import season.nfl.nflseasoncalculatorapp.input.DivisionChampRow;
+import season.nfl.nflseasoncalculatorapp.input.WildcardRow;
 import season.nfl.nflseasoncalculatorapp.util.InputSetter;
 
 /**
@@ -109,40 +112,13 @@ public class PlayoffsFragment extends Fragment {
             conferenceLabel.setText(conferenceName);
             conferenceLayout.addView(conferenceLabel);
 
-            TableLayout conferenceTable = new TableLayout(activity);
-            conferenceLayout.addView(conferenceTable);
+            TableLayout conferenceTableLayout = new TableLayout(activity);
+            conferenceLayout.addView(conferenceTableLayout);
 
-            addLabelsRowToConferenceTable(activity, conferenceTable);
-            addDivisionChampRowsToConferenceTable(activity, conferenceTable, leagueConference);
-
-            for (int i = 0; i < 2; i++) {
-                TableRow wildcardRow = new TableRow(activity);
-
-                TextView wildcardLabel = new TextView(activity);
-                Resources resources = getResources();
-                String wildcardLabelString = resources.getString(R.string.wildcard_label, conferenceName);
-                wildcardLabel.setText(wildcardLabelString);
-                wildcardRow.addView(wildcardLabel);
-
-                Spinner selectWildcard = new Spinner(activity);
-                List<Team> conferenceTeams = leagueConference.getTeams();
-                String[] conferenceTeamNames = new String[conferenceTeams.size()];
-                for (int j = 0; j < conferenceTeams.size(); j++) {
-                    Team conferenceTeam = conferenceTeams.get(j);
-                    conferenceTeamNames[j] = conferenceTeam.getName();
-                }
-                ArrayAdapter<String> wildcardAdapter = new ArrayAdapter<>(activity,
-                        android.R.layout.simple_spinner_item, conferenceTeamNames);
-                selectWildcard.setAdapter(wildcardAdapter);
-                wildcardRow.addView(selectWildcard);
-
-                TextView wildcardSeed = new TextView(activity);
-                String wildcardSeedString = resources.getString(R.string.display_one_number, (i + 5));
-                wildcardSeed.setText(wildcardSeedString);
-                wildcardRow.addView(wildcardSeed);
-
-                conferenceTable.addView(wildcardRow);
-            }
+            addLabelsRowToConferenceTable(activity, conferenceTableLayout);
+            ConferenceTable conferenceTable = new ConferenceTable(leagueConference, conferenceTableLayout);
+            addDivisionChampRowsToConferenceTable(activity, conferenceTable);
+            addWildcardRowsToConferenceTable(activity, conferenceTable);
 
             selectPlayoffTeamsLayout.addView(conferenceLayout);
         }
@@ -197,8 +173,10 @@ public class PlayoffsFragment extends Fragment {
         labelsRow.addView(seedLabel);
     }
 
-    private void addDivisionChampRowsToConferenceTable(Activity activity, TableLayout conferenceTable,
-                                                       Conference leagueConference) {
+    private void addDivisionChampRowsToConferenceTable(Activity activity, ConferenceTable conferenceTable) {
+        Conference leagueConference = conferenceTable.getConference();
+        TableLayout conferenceTableLayout = conferenceTable.getTableLayout();
+
         Resources resources = activity.getResources();
         String conferenceName = leagueConference.getName();
 
@@ -208,7 +186,7 @@ public class PlayoffsFragment extends Fragment {
             String divisionName = division.getName();
 
             TableRow divisionRow = new TableRow(activity);
-            conferenceTable.addView(divisionRow);
+            conferenceTableLayout.addView(divisionRow);
 
             String divisionChampLabelString = resources.getString(R.string.division_champion,
                     (conferenceName+ " " + divisionName));
@@ -217,6 +195,23 @@ public class PlayoffsFragment extends Fragment {
             divisionRow.addView(divisionChampLabel);
 
             addDivisionChampSpinnersToDivisionRow(activity, divisionRow, divisions, i);
+
+            DivisionChampRow divisionChampRow = new DivisionChampRow(division, divisionRow);
+            conferenceTable.addDivisionChampRow(divisionChampRow);
+        }
+    }
+
+    private void addWildcardRowsToConferenceTable(Activity activity, ConferenceTable conferenceTable) {
+        Conference leagueConference = conferenceTable.getConference();
+        TableLayout conferenceTableLayout = conferenceTable.getTableLayout();
+
+        for (int i = 0; i < 2; i++) {
+            TableRow wildcardRowView = new TableRow(activity);
+            addViewsToWildcardRow(activity, wildcardRowView, leagueConference, i);
+            conferenceTableLayout.addView(wildcardRowView);
+
+            WildcardRow wildcardRow = new WildcardRow(wildcardRowView);
+            conferenceTable.addWildcardRow(wildcardRow);
         }
     }
 
@@ -247,5 +242,33 @@ public class PlayoffsFragment extends Fragment {
         selectSeed.setAdapter(seedAdapter);
         selectSeed.setSelection(divisionIndex);
         divisionRow.addView(selectSeed);
+    }
+
+    private void addViewsToWildcardRow(Activity activity, TableRow wildcardRow, Conference leagueConference,
+                                       int wildcardIndex) {
+        String conferenceName = leagueConference.getName();
+
+        TextView wildcardLabel = new TextView(activity);
+        Resources resources = getResources();
+        String wildcardLabelString = resources.getString(R.string.wildcard_label, conferenceName);
+        wildcardLabel.setText(wildcardLabelString);
+        wildcardRow.addView(wildcardLabel);
+
+        Spinner selectWildcard = new Spinner(activity);
+        List<Team> conferenceTeams = leagueConference.getTeams();
+        String[] conferenceTeamNames = new String[conferenceTeams.size()];
+        for (int j = 0; j < conferenceTeams.size(); j++) {
+            Team conferenceTeam = conferenceTeams.get(j);
+            conferenceTeamNames[j] = conferenceTeam.getName();
+        }
+        ArrayAdapter<String> wildcardAdapter = new ArrayAdapter<>(activity,
+                android.R.layout.simple_spinner_item, conferenceTeamNames);
+        selectWildcard.setAdapter(wildcardAdapter);
+        wildcardRow.addView(selectWildcard);
+
+        TextView wildcardSeed = new TextView(activity);
+        String wildcardSeedString = resources.getString(R.string.display_one_number, (wildcardIndex + 5));
+        wildcardSeed.setText(wildcardSeedString);
+        wildcardRow.addView(wildcardSeed);
     }
 }
