@@ -5,6 +5,7 @@
 
     <string name="set_all_team_settings">Set All Teams\' Matchups Using:</string>
     <string name="select_team">Select Team</string>
+    <string name="select_team_short">Team</string>
 
     <string name="save_teams_to_file">Save Current Team Settings to Memory</string>
 
@@ -45,6 +46,14 @@
     <string name="back">Back</string>
     <string name="save_and_back">Save and Back</string>
 
+    <!-- Playoff Strings -->
+    <string name="division_wildcard">Div /\nWildcard</string>
+    <string name="seed">Seed</string>
+    <string name="division_champion">%s Champ</string>
+    <string name="wildcard_label">%s Wildcard</string>
+
+
+    <string name="display_one_number">%d</string>
     <plurals name="display_number">
         <item quantity="other">%d</item>
     </plurals>
