@@ -10,4 +10,8 @@ public class WildcardRow {
         this.wildcardRowView = wildcardRowView;
     }
 
+    public TableRow getWildcardRowView() {
+        return wildcardRowView;
+    }
+
 }

@@ -10,6 +10,8 @@ public class DivisionChampRow {
 
     private TableRow divisionRow;
 
+    private String previousTeam;
+
     private int previousSeed;
 
     public DivisionChampRow(Division division, TableRow divisionRow) {
@@ -27,6 +29,14 @@ public class DivisionChampRow {
 
     public void setPreviousSeed(int previousSeed) {
         this.previousSeed = previousSeed;
+    }
+
+    public String getPreviousTeam() {
+        return previousTeam;
+    }
+
+    public void setPreviousTeam(String previousTeam) {
+        this.previousTeam = previousTeam;
     }
 
 }
