@@ -120,6 +120,8 @@ public class PlayoffsFragment extends Fragment {
             addDivisionChampRowsToConferenceTable(activity, conferenceTable);
             addWildcardRowsToConferenceTable(activity, conferenceTable);
 
+            conferenceTable.setInputListeners();
+
             selectPlayoffTeamsLayout.addView(conferenceLayout);
         }
     }

@@ -10,9 +10,23 @@ public class DivisionChampRow {
 
     private TableRow divisionRow;
 
+    private int previousSeed;
+
     public DivisionChampRow(Division division, TableRow divisionRow) {
         this.division = division;
         this.divisionRow = divisionRow;
+    }
+
+    public TableRow getDivisionRowView() {
+        return divisionRow;
+    }
+
+    public int getPreviousSeed() {
+        return previousSeed;
+    }
+
+    public void setPreviousSeed(int previousSeed) {
+        this.previousSeed = previousSeed;
     }
 
 }
