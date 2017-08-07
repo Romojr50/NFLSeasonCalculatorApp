@@ -266,6 +266,7 @@ public class PlayoffsFragment extends Fragment {
         ArrayAdapter<String> wildcardAdapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_spinner_item, conferenceTeamNames);
         selectWildcard.setAdapter(wildcardAdapter);
+        selectWildcard.setSelection(wildcardIndex + 1);
         wildcardRow.addView(selectWildcard);
 
         TextView wildcardSeed = new TextView(activity);

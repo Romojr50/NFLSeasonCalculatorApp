@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -52,17 +53,51 @@ public class ConferenceTable {
     public void setInputListeners() {
         for (int i = 0; i < divisionChampRows.size(); i++) {
             final DivisionChampRow divisionChampRow = divisionChampRows.get(i);
-            TableRow divisionRow = divisionChampRow.getDivisionRowView();
-            setOnItemSelectedListenerOfTeamSelect(divisionChampRow, i);
+            setOnItemSelectedListenerOfDivisionChampTeamSelect(divisionChampRow);
             setOnItemSelectedListenerOfSeedSelect(divisionChampRow, i);
+        }
+        for (int i = 0; i < wildcardRows.size(); i++) {
+            final WildcardRow wildcardRow = wildcardRows.get(i);
+            setOnItemSelectedListenerOfWildcardTeamSelect(wildcardRow);
         }
     }
 
-    private void setOnItemSelectedListenerOfTeamSelect(final DivisionChampRow divisionChampRow, final int currentSpinnerIndex) {
+    private void setOnItemSelectedListenerOfWildcardTeamSelect(final WildcardRow wildcardRow) {
+        TableRow wildcardRowView = wildcardRow.getWildcardRowView();
+        View teamSelectView = wildcardRowView.getChildAt(POSITION_OF_TEAM_SELECT);
+
+        if (teamSelectView instanceof Spinner) {
+            Spinner teamSelect = (Spinner) teamSelectView;
+            teamSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    String selected = parentView.getItemAtPosition(position).toString();
+                    Spinner previousSpinnerWithSelected = getPreviousDivisionChampSpinnerWtihSelected(
+                            selected, -1, POSITION_OF_TEAM_SELECT);
+                    if (previousSpinnerWithSelected != null) {
+                        //TODO: What if we select a wildcard that was selected as Div Champ but same Div doesn't have existing wildcard to switch with?
+                        String previousTeam = wildcardRow.getPreviousTeam();
+                        if (previousTeam != null) {
+                            int previousTeamIndex = getIndexOfItemInSpinner(previousSpinnerWithSelected,
+                                    previousTeam);
+                            previousSpinnerWithSelected.setSelection(previousTeamIndex);
+                        }
+                    }
+                    wildcardRow.setPreviousTeam(selected);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                }
+            });
+        }
+    }
+
+    private void setOnItemSelectedListenerOfDivisionChampTeamSelect(
+            final DivisionChampRow divisionChampRow) {
         TableRow divisionRow = divisionChampRow.getDivisionRowView();
         View teamSelectView = divisionRow.getChildAt(POSITION_OF_TEAM_SELECT);
 
-        //TODO: Fix test case switching Texans and Jaguars
         if (teamSelectView instanceof Spinner) {
             Spinner teamSelect = (Spinner) teamSelectView;
             teamSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -74,15 +109,8 @@ public class ConferenceTable {
                     if (previousSpinnerWithSelected != null) {
                         String previousTeam = divisionChampRow.getPreviousTeam();
                         if (previousTeam != null) {
-                            int previousTeamIndex = -1;
-                            int previousSpinnerLength = previousSpinnerWithSelected.getChildCount();
-                            for (int i = 0; i < previousSpinnerLength; i++) {
-                                String option = previousSpinnerWithSelected.getItemAtPosition(i).toString();
-                                if (previousTeam.equals(option)) {
-                                    previousTeamIndex = i;
-                                    break;
-                                }
-                            }
+                            int previousTeamIndex = getIndexOfItemInSpinner(previousSpinnerWithSelected,
+                                    previousTeam);
                             previousSpinnerWithSelected.setSelection(previousTeamIndex);
                         }
                     }
@@ -107,7 +135,7 @@ public class ConferenceTable {
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     String selected = parentView.getItemAtPosition(position).toString();
                     Spinner previousSpinnerWithSelected = getPreviousDivisionChampSpinnerWtihSelected(
-                            selected, currentSpinnerIndex);
+                            selected, currentSpinnerIndex, POSITION_OF_SEED_SELECT);
                     if (previousSpinnerWithSelected != null) {
                         int previousSeed = divisionChampRow.getPreviousSeed();
                         previousSpinnerWithSelected.setSelection(previousSeed - 1);
@@ -122,14 +150,15 @@ public class ConferenceTable {
         }
     }
 
-    private Spinner getPreviousDivisionChampSpinnerWtihSelected(String selected, int currentSpinnerIndex) {
+    private Spinner getPreviousDivisionChampSpinnerWtihSelected(
+            String selected, int currentSpinnerIndex, int positionOfSpinnerInRow) {
         Spinner previousSpinnerWithSelected = null;
 
         for (int i = 0; i < divisionChampRows.size(); i++) {
             if (i != currentSpinnerIndex) {
                 DivisionChampRow divisionChampRow = divisionChampRows.get(i);
                 TableRow divisionRow = divisionChampRow.getDivisionRowView();
-                View seedView = divisionRow.getChildAt(POSITION_OF_SEED_SELECT);
+                View seedView = divisionRow.getChildAt(positionOfSpinnerInRow);
                 if (seedView instanceof Spinner) {
                     Spinner seedSpinner = (Spinner) seedView;
                     String selectedSeed = seedSpinner.getSelectedItem().toString();
@@ -167,6 +196,20 @@ public class ConferenceTable {
         }
 
         return previousSpinnerWithSelected;
+    }
+
+    private int getIndexOfItemInSpinner(Spinner spinner, String item) {
+        int indexOfItem = -1;
+        SpinnerAdapter previousAdapter = spinner.getAdapter();
+        int previousSpinnerLength = previousAdapter.getCount();
+        for (int i = 0; i < previousSpinnerLength; i++) {
+            String option = (String) previousAdapter.getItem(i);
+            if (item.equals(option)) {
+                indexOfItem = i;
+                break;
+            }
+        }
+        return indexOfItem;
     }
 
 }
