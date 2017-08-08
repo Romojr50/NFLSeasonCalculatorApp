@@ -89,35 +89,7 @@ public class ConferenceTable {
                         }
                     }
 
-                    TableRow otherWildcardRowView = otherWildcardRow.getWildcardRowView();
-                    View otherWildcardTeamSelect = otherWildcardRowView.getChildAt(POSITION_OF_TEAM_SELECT);
-                    if (otherWildcardTeamSelect instanceof Spinner) {
-                        Spinner otherWildcardTeamSpinner = (Spinner) otherWildcardTeamSelect;
-                        String otherSelectedWildcard = (String) otherWildcardTeamSpinner.getSelectedItem();
-                        Spinner divisionChampWithOtherSelected = getPreviousDivisionChampSpinnerWtihSelected(
-                                otherSelectedWildcard, -1, POSITION_OF_TEAM_SELECT);
-                        if (selected.equals(otherSelectedWildcard) || divisionChampWithOtherSelected != null) {
-                            boolean foundNextIndex = false;
-                            String previousSelected = wildcardRow.getPreviousTeam();
-                            int nextIndex = getIndexOfItemInSpinner(otherWildcardTeamSpinner, previousSelected);
-                            // TODO: Fix switching of wildcards, can set both to Chargers right now
-                            while (!foundNextIndex) {
-                                if (nextIndex != position) {
-                                    String nextSelected = parentView.getItemAtPosition(nextIndex).toString();
-                                    Spinner divisionChampWithIndex = getPreviousDivisionChampSpinnerWtihSelected(
-                                            nextSelected, -1, POSITION_OF_TEAM_SELECT);
-                                    if (divisionChampWithIndex == null) {
-                                        foundNextIndex = true;
-                                    }
-                                }
-                                nextIndex++;
-                                if (nextIndex >= parentView.getCount()) {
-                                    nextIndex = 0;
-                                }
-                            }
-                            otherWildcardTeamSpinner.setSelection(nextIndex);
-                        }
-                    }
+                    switchOtherWildcardRow(wildcardRow, otherWildcardRow, selected, position, parentView);
 
                     wildcardRow.setPreviousTeam(selected);
                 }
@@ -216,6 +188,38 @@ public class ConferenceTable {
         }
         nextIndex--;
         spinner.setSelection(nextIndex);
+    }
+
+    private void switchOtherWildcardRow(WildcardRow wildcardRow, WildcardRow otherWildcardRow, String selected, int position, AdapterView<?> parentView) {
+        TableRow otherWildcardRowView = otherWildcardRow.getWildcardRowView();
+        View otherWildcardTeamSelect = otherWildcardRowView.getChildAt(POSITION_OF_TEAM_SELECT);
+        if (otherWildcardTeamSelect instanceof Spinner) {
+            Spinner otherWildcardTeamSpinner = (Spinner) otherWildcardTeamSelect;
+            String otherSelectedWildcard = (String) otherWildcardTeamSpinner.getSelectedItem();
+            Spinner divisionChampWithOtherSelected = getPreviousDivisionChampSpinnerWtihSelected(
+                    otherSelectedWildcard, -1, POSITION_OF_TEAM_SELECT);
+            if (selected.equals(otherSelectedWildcard) || divisionChampWithOtherSelected != null) {
+                boolean foundNextIndex = false;
+                String previousSelected = wildcardRow.getPreviousTeam();
+                int nextIndex = getIndexOfItemInSpinner(otherWildcardTeamSpinner, previousSelected);
+                while (!foundNextIndex) {
+                    if (nextIndex != position) {
+                        String nextSelected = parentView.getItemAtPosition(nextIndex).toString();
+                        Spinner divisionChampWithIndex = getPreviousDivisionChampSpinnerWtihSelected(
+                                nextSelected, -1, POSITION_OF_TEAM_SELECT);
+                        if (divisionChampWithIndex == null) {
+                            foundNextIndex = true;
+                            break;
+                        }
+                    }
+                    nextIndex++;
+                    if (nextIndex >= parentView.getCount()) {
+                        nextIndex = 0;
+                    }
+                }
+                otherWildcardTeamSpinner.setSelection(nextIndex);
+            }
+        }
     }
 
     private Spinner getPreviousWildcardSpinnerWtihSelected(String selected, int currentSpinnerIndex) {
