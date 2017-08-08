@@ -58,11 +58,13 @@ public class ConferenceTable {
         }
         for (int i = 0; i < wildcardRows.size(); i++) {
             final WildcardRow wildcardRow = wildcardRows.get(i);
-            setOnItemSelectedListenerOfWildcardTeamSelect(wildcardRow);
+            WildcardRow otherWildcardRow = wildcardRows.get(Math.abs(i - 1));
+            setOnItemSelectedListenerOfWildcardTeamSelect(wildcardRow, otherWildcardRow);
         }
     }
 
-    private void setOnItemSelectedListenerOfWildcardTeamSelect(final WildcardRow wildcardRow) {
+    private void setOnItemSelectedListenerOfWildcardTeamSelect(
+            final WildcardRow wildcardRow, final WildcardRow otherWildcardRow) {
         TableRow wildcardRowView = wildcardRow.getWildcardRowView();
         View teamSelectView = wildcardRowView.getChildAt(POSITION_OF_TEAM_SELECT);
 
@@ -75,14 +77,48 @@ public class ConferenceTable {
                     Spinner previousSpinnerWithSelected = getPreviousDivisionChampSpinnerWtihSelected(
                             selected, -1, POSITION_OF_TEAM_SELECT);
                     if (previousSpinnerWithSelected != null) {
-                        //TODO: What if we select a wildcard that was selected as Div Champ but same Div doesn't have existing wildcard to switch with?
                         String previousTeam = wildcardRow.getPreviousTeam();
                         if (previousTeam != null) {
                             int previousTeamIndex = getIndexOfItemInSpinner(previousSpinnerWithSelected,
                                     previousTeam);
-                            previousSpinnerWithSelected.setSelection(previousTeamIndex);
+                            if (previousTeamIndex > -1) {
+                                previousSpinnerWithSelected.setSelection(previousTeamIndex);
+                            } else {
+                                setSpinnerToNextIndex(previousSpinnerWithSelected, selected);
+                            }
                         }
                     }
+
+                    TableRow otherWildcardRowView = otherWildcardRow.getWildcardRowView();
+                    View otherWildcardTeamSelect = otherWildcardRowView.getChildAt(POSITION_OF_TEAM_SELECT);
+                    if (otherWildcardTeamSelect instanceof Spinner) {
+                        Spinner otherWildcardTeamSpinner = (Spinner) otherWildcardTeamSelect;
+                        String otherSelectedWildcard = (String) otherWildcardTeamSpinner.getSelectedItem();
+                        Spinner divisionChampWithOtherSelected = getPreviousDivisionChampSpinnerWtihSelected(
+                                otherSelectedWildcard, -1, POSITION_OF_TEAM_SELECT);
+                        if (selected.equals(otherSelectedWildcard) || divisionChampWithOtherSelected != null) {
+                            boolean foundNextIndex = false;
+                            String previousSelected = wildcardRow.getPreviousTeam();
+                            int nextIndex = getIndexOfItemInSpinner(otherWildcardTeamSpinner, previousSelected);
+                            // TODO: Fix switching of wildcards, can set both to Chargers right now
+                            while (!foundNextIndex) {
+                                if (nextIndex != position) {
+                                    String nextSelected = parentView.getItemAtPosition(nextIndex).toString();
+                                    Spinner divisionChampWithIndex = getPreviousDivisionChampSpinnerWtihSelected(
+                                            nextSelected, -1, POSITION_OF_TEAM_SELECT);
+                                    if (divisionChampWithIndex == null) {
+                                        foundNextIndex = true;
+                                    }
+                                }
+                                nextIndex++;
+                                if (nextIndex >= parentView.getCount()) {
+                                    nextIndex = 0;
+                                }
+                            }
+                            otherWildcardTeamSpinner.setSelection(nextIndex);
+                        }
+                    }
+
                     wildcardRow.setPreviousTeam(selected);
                 }
 
@@ -171,6 +207,15 @@ public class ConferenceTable {
         }
 
         return previousSpinnerWithSelected;
+    }
+
+    private void setSpinnerToNextIndex(Spinner spinner, String selected) {
+        int nextIndex = getIndexOfItemInSpinner(spinner, selected);
+        if (nextIndex == 0) {
+            nextIndex = 2;
+        }
+        nextIndex--;
+        spinner.setSelection(nextIndex);
     }
 
     private Spinner getPreviousWildcardSpinnerWtihSelected(String selected, int currentSpinnerIndex) {
