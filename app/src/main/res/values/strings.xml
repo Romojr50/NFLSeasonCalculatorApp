@@ -51,6 +51,12 @@
     <string name="seed">Seed</string>
     <string name="division_champion">%s Champ</string>
     <string name="wildcard_label">%s Wildcard</string>
+    <string name="generate_playoff_table">Generate Playoff Table</string>
+
+    <string name="divisional_label">Div\nRnd</string>
+    <string name="conference_label">Conf\nRnd</string>
+    <string name="conference_champ_label">Conf\nChamps</string>
+    <string name="super_bowl_label">SB\nChamps</string>
 
 
     <string name="display_one_number">%d</string>

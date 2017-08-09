@@ -5,10 +5,43 @@
     tools:context="season.nfl.nflseasoncalculatorapp.fragments.PlayoffsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:id="@+id/selectPlayoffTeamsLayout"
+    <ScrollView
+        android:id="@+id/playoffScroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/playoffContainterLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/selectPlayoffTeamsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
+
+            <Button
+                android:id="@+id/generatePlayoffTableButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/generate_playoff_table" />
+
+            <LinearLayout
+                android:id="@+id/playoffTableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:id="@+id/playoffTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </TableLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

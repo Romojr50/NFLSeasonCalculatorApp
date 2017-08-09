@@ -199,24 +199,7 @@ public class ConferenceTable {
             Spinner divisionChampWithOtherSelected = getPreviousDivisionChampSpinnerWtihSelected(
                     otherSelectedWildcard, -1, POSITION_OF_TEAM_SELECT);
             if (selected.equals(otherSelectedWildcard) || divisionChampWithOtherSelected != null) {
-                boolean foundNextIndex = false;
-                String previousSelected = wildcardRow.getPreviousTeam();
-                int nextIndex = getIndexOfItemInSpinner(otherWildcardTeamSpinner, previousSelected);
-                while (!foundNextIndex) {
-                    if (nextIndex != position) {
-                        String nextSelected = parentView.getItemAtPosition(nextIndex).toString();
-                        Spinner divisionChampWithIndex = getPreviousDivisionChampSpinnerWtihSelected(
-                                nextSelected, -1, POSITION_OF_TEAM_SELECT);
-                        if (divisionChampWithIndex == null) {
-                            foundNextIndex = true;
-                            break;
-                        }
-                    }
-                    nextIndex++;
-                    if (nextIndex >= parentView.getCount()) {
-                        nextIndex = 0;
-                    }
-                }
+                int nextIndex = findNextIndexForOtherWildcard(wildcardRow, otherWildcardTeamSpinner, position, parentView);
                 otherWildcardTeamSpinner.setSelection(nextIndex);
             }
         }
@@ -259,6 +242,29 @@ public class ConferenceTable {
             }
         }
         return indexOfItem;
+    }
+
+    private int findNextIndexForOtherWildcard(WildcardRow wildcardRow, Spinner otherWildcardTeamSpinner, int position, AdapterView<?> parentView) {
+        boolean foundNextIndex = false;
+        String previousSelected = wildcardRow.getPreviousTeam();
+        int nextIndex = getIndexOfItemInSpinner(otherWildcardTeamSpinner, previousSelected);
+        while (!foundNextIndex) {
+            if (nextIndex != position) {
+                String nextSelected = parentView.getItemAtPosition(nextIndex).toString();
+                Spinner divisionChampWithIndex = getPreviousDivisionChampSpinnerWtihSelected(
+                        nextSelected, -1, POSITION_OF_TEAM_SELECT);
+                if (divisionChampWithIndex == null) {
+                    foundNextIndex = true;
+                    break;
+                }
+            }
+            nextIndex++;
+            if (nextIndex >= parentView.getCount()) {
+                nextIndex = 0;
+            }
+        }
+
+        return nextIndex;
     }
 
 }

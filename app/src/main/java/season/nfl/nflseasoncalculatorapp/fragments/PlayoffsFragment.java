@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -96,7 +97,7 @@ public class PlayoffsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
-        Activity activity = getActivity();
+        final Activity activity = getActivity();
 
         LinearLayout selectPlayoffTeamsLayout = (LinearLayout) view.findViewById(R.id.selectPlayoffTeamsLayout);
 
@@ -123,6 +124,39 @@ public class PlayoffsFragment extends Fragment {
             conferenceTable.setInputListeners();
 
             selectPlayoffTeamsLayout.addView(conferenceLayout);
+
+            Button generateTableButton = (Button) activity.findViewById(R.id.generatePlayoffTableButton);
+            generateTableButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TableLayout playoffTable = (TableLayout) activity.findViewById(R.id.playoffTable);
+                    playoffTable.removeAllViewsInLayout();
+
+                    TableRow playoffTableLabelRow = new TableRow(activity);
+
+                    TextView playoffTableTeamLabel = new TextView(activity);
+                    playoffTableTeamLabel.setText(R.string.select_team_short);
+                    playoffTableLabelRow.addView(playoffTableTeamLabel);
+
+                    TextView divisionalLabel = new TextView(activity);
+                    divisionalLabel.setText(R.string.divisional_label);
+                    playoffTableLabelRow.addView(divisionalLabel);
+
+                    TextView conferenceLabel = new TextView(activity);
+                    conferenceLabel.setText(R.string.conference_label);
+                    playoffTableLabelRow.addView(conferenceLabel);
+
+                    TextView conferenceChampLabel = new TextView(activity);
+                    conferenceChampLabel.setText(R.string.conference_champ_label);
+                    playoffTableLabelRow.addView(conferenceChampLabel);
+
+                    TextView superBowlLabel = new TextView(activity);
+                    superBowlLabel.setText(R.string.super_bowl_label);
+                    playoffTableLabelRow.addView(superBowlLabel);
+
+                    playoffTable.addView(playoffTableLabelRow);
+                }
+            });
         }
     }
 
@@ -239,7 +273,7 @@ public class PlayoffsFragment extends Fragment {
         for (int j = 1; j <= divisions.size(); j++) {
             divisionChampSeeds[j - 1] = j;
         }
-        ArrayAdapter<Integer> seedAdapter = new ArrayAdapter<Integer>(activity,
+        ArrayAdapter<Integer> seedAdapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_spinner_item, divisionChampSeeds);
         selectSeed.setAdapter(seedAdapter);
         selectSeed.setSelection(divisionIndex);
