@@ -138,10 +138,11 @@ public class PlayoffsFragment extends Fragment {
             public void onClick(View v) {
                 TableLayout playoffTable = (TableLayout) activity.findViewById(R.id.playoffTable);
                 playoffTable.removeAllViewsInLayout();
+                TableRow playoffTableLabelRow = createPlayoffTableLabelRow(activity);
+                playoffTable.addView(playoffTableLabelRow);
 
                 for (ConferenceTable conferenceTable : conferenceTables) {
                     String conferenceName = conferenceTable.getConferenceName();
-                    TableRow playoffTableLabelRow = createPlayoffTableLabelRow(activity);
                     List<DivisionChampRow> divisionChampRows = conferenceTable.getDivisionChampRows();
                     for (DivisionChampRow divisionChampRow : divisionChampRows) {
                         String divisionChampName = divisionChampRow.getDivisionChampName();
@@ -164,7 +165,6 @@ public class PlayoffsFragment extends Fragment {
                         playoffs.setTeamConferenceSeed(playoffWildcard, seed);
                     }
                 }
-                playoffTable.addView(playoffTableLabelRow);
             }
         });
     }
