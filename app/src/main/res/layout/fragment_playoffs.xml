@@ -19,7 +19,7 @@
             <LinearLayout
                 android:id="@+id/selectPlayoffTeamsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"></LinearLayout>
 
             <Button
@@ -31,13 +31,13 @@
             <LinearLayout
                 android:id="@+id/playoffTableLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="325dp"
                 android:orientation="vertical">
 
                 <TableLayout
                     android:id="@+id/playoffTable"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                 </TableLayout>
             </LinearLayout>
