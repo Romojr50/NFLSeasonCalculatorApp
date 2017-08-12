@@ -18,6 +18,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nfl.season.league.Conference;
@@ -25,6 +26,7 @@ import nfl.season.league.Division;
 import nfl.season.league.League;
 import nfl.season.league.Team;
 import nfl.season.playoffs.NFLPlayoffConference;
+import nfl.season.playoffs.NFLPlayoffTeam;
 import nfl.season.playoffs.NFLPlayoffs;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
@@ -48,6 +50,8 @@ public class PlayoffsFragment extends Fragment {
     private League nfl;
 
     private NFLPlayoffs playoffs;
+
+    private List<ConferenceTable> conferenceTables;
 
     private OnFragmentInteractionListener mListener;
 
@@ -101,10 +105,11 @@ public class PlayoffsFragment extends Fragment {
 
         LinearLayout selectPlayoffTeamsLayout = (LinearLayout) view.findViewById(R.id.selectPlayoffTeamsLayout);
 
+        conferenceTables = new ArrayList<>();
         List<NFLPlayoffConference> playoffConferences = playoffs.getConferences();
         for (NFLPlayoffConference playoffConference : playoffConferences) {
             Conference leagueConference = playoffConference.getConference();
-            String conferenceName = leagueConference.getName();
+            final String conferenceName = leagueConference.getName();
 
             LinearLayout conferenceLayout = new LinearLayout(activity);
             conferenceLayout.setOrientation(LinearLayout.VERTICAL);
@@ -117,47 +122,51 @@ public class PlayoffsFragment extends Fragment {
             conferenceLayout.addView(conferenceTableLayout);
 
             addLabelsRowToConferenceTable(activity, conferenceTableLayout);
-            ConferenceTable conferenceTable = new ConferenceTable(leagueConference, conferenceTableLayout);
+            final ConferenceTable conferenceTable = new ConferenceTable(leagueConference, conferenceTableLayout);
             addDivisionChampRowsToConferenceTable(activity, conferenceTable);
             addWildcardRowsToConferenceTable(activity, conferenceTable);
 
             conferenceTable.setInputListeners();
 
             selectPlayoffTeamsLayout.addView(conferenceLayout);
-
-            Button generateTableButton = (Button) activity.findViewById(R.id.generatePlayoffTableButton);
-            generateTableButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TableLayout playoffTable = (TableLayout) activity.findViewById(R.id.playoffTable);
-                    playoffTable.removeAllViewsInLayout();
-
-                    TableRow playoffTableLabelRow = new TableRow(activity);
-
-                    TextView playoffTableTeamLabel = new TextView(activity);
-                    playoffTableTeamLabel.setText(R.string.select_team_short);
-                    playoffTableLabelRow.addView(playoffTableTeamLabel);
-
-                    TextView divisionalLabel = new TextView(activity);
-                    divisionalLabel.setText(R.string.divisional_label);
-                    playoffTableLabelRow.addView(divisionalLabel);
-
-                    TextView conferenceLabel = new TextView(activity);
-                    conferenceLabel.setText(R.string.conference_label);
-                    playoffTableLabelRow.addView(conferenceLabel);
-
-                    TextView conferenceChampLabel = new TextView(activity);
-                    conferenceChampLabel.setText(R.string.conference_champ_label);
-                    playoffTableLabelRow.addView(conferenceChampLabel);
-
-                    TextView superBowlLabel = new TextView(activity);
-                    superBowlLabel.setText(R.string.super_bowl_label);
-                    playoffTableLabelRow.addView(superBowlLabel);
-
-                    playoffTable.addView(playoffTableLabelRow);
-                }
-            });
+            conferenceTables.add(conferenceTable);
         }
+
+        Button generateTableButton = (Button) activity.findViewById(R.id.generatePlayoffTableButton);
+        generateTableButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TableLayout playoffTable = (TableLayout) activity.findViewById(R.id.playoffTable);
+                playoffTable.removeAllViewsInLayout();
+
+                for (ConferenceTable conferenceTable : conferenceTables) {
+                    String conferenceName = conferenceTable.getConferenceName();
+                    TableRow playoffTableLabelRow = createPlayoffTableLabelRow(activity);
+                    List<DivisionChampRow> divisionChampRows = conferenceTable.getDivisionChampRows();
+                    for (DivisionChampRow divisionChampRow : divisionChampRows) {
+                        String divisionChampName = divisionChampRow.getDivisionChampName();
+                        String divisionName = divisionChampRow.getDivisionName();
+                        int seed = divisionChampRow.getSeed();
+                        Team divisionChamp = nfl.getTeam(divisionChampName);
+                        NFLPlayoffTeam playoffDivisionChamp = playoffs.createPlayoffTeam(divisionChamp);
+                        playoffs.setDivisionWinner(
+                                conferenceName, divisionName, playoffDivisionChamp);
+                        playoffs.setTeamConferenceSeed(playoffDivisionChamp, seed);
+                    }
+
+                    List<WildcardRow> wildcardRows = conferenceTable.getWildcardRows();
+                    for (WildcardRow wildcardRow : wildcardRows) {
+                        String wildcardName = wildcardRow.getWildcardName();
+                        int seed = wildcardRow.getSeed();
+                        Team wildcardTeam = nfl.getTeam(wildcardName);
+                        NFLPlayoffTeam playoffWildcard = playoffs.createPlayoffTeam(wildcardTeam);
+                        playoffs.addWildcardTeam(conferenceName, playoffWildcard);
+                        playoffs.setTeamConferenceSeed(playoffWildcard, seed);
+                    }
+                }
+                playoffTable.addView(playoffTableLabelRow);
+            }
+        });
     }
 
     @Override
@@ -249,6 +258,32 @@ public class PlayoffsFragment extends Fragment {
             WildcardRow wildcardRow = new WildcardRow(wildcardRowView);
             conferenceTable.addWildcardRow(wildcardRow);
         }
+    }
+
+    private TableRow createPlayoffTableLabelRow(Activity activity) {
+        TableRow playoffTableLabelRow = new TableRow(activity);
+
+        TextView playoffTableTeamLabel = new TextView(activity);
+        playoffTableTeamLabel.setText(R.string.select_team_short);
+        playoffTableLabelRow.addView(playoffTableTeamLabel);
+
+        TextView divisionalLabel = new TextView(activity);
+        divisionalLabel.setText(R.string.divisional_label);
+        playoffTableLabelRow.addView(divisionalLabel);
+
+        TextView conferenceLabel = new TextView(activity);
+        conferenceLabel.setText(R.string.conference_label);
+        playoffTableLabelRow.addView(conferenceLabel);
+
+        TextView conferenceChampLabel = new TextView(activity);
+        conferenceChampLabel.setText(R.string.conference_champ_label);
+        playoffTableLabelRow.addView(conferenceChampLabel);
+
+        TextView superBowlLabel = new TextView(activity);
+        superBowlLabel.setText(R.string.super_bowl_label);
+        playoffTableLabelRow.addView(superBowlLabel);
+
+        return playoffTableLabelRow;
     }
 
     private void addDivisionChampSpinnersToDivisionRow(Activity activity, TableRow divisionRow,

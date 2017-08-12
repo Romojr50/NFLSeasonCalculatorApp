@@ -15,9 +15,9 @@ import nfl.season.league.Conference;
 
 public class ConferenceTable {
 
-    private static final int POSITION_OF_TEAM_SELECT = 1;
+    protected static final int POSITION_OF_TEAM_SELECT = 1;
 
-    private static final int POSITION_OF_SEED_SELECT = 2;
+    protected static final int POSITION_OF_SEED_SELECT = 2;
 
     private TableLayout conferenceTableLayout;
 
@@ -38,6 +38,10 @@ public class ConferenceTable {
         return this.leagueConference;
     }
 
+    public String getConferenceName() {
+        return leagueConference.getName();
+    }
+
     public TableLayout getTableLayout() {
         return this.conferenceTableLayout;
     }
@@ -46,8 +50,16 @@ public class ConferenceTable {
         divisionChampRows.add(divisionChampRow);
     }
 
+    public List<DivisionChampRow> getDivisionChampRows() {
+        return divisionChampRows;
+    }
+
     public void addWildcardRow(WildcardRow wildcardRow) {
         wildcardRows.add(wildcardRow);
+    }
+
+    public List<WildcardRow> getWildcardRows() {
+        return wildcardRows;
     }
 
     public void setInputListeners() {
