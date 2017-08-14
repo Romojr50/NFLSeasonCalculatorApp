@@ -50,23 +50,23 @@ public class DivisionChampRow {
         return seed;
     }
 
-    public TableRow getDivisionRowView() {
+    TableRow getDivisionRowView() {
         return divisionRow;
     }
 
-    public int getPreviousSeed() {
+    int getPreviousSeed() {
         return previousSeed;
     }
 
-    public void setPreviousSeed(int previousSeed) {
+    void setPreviousSeed(int previousSeed) {
         this.previousSeed = previousSeed;
     }
 
-    public String getPreviousTeam() {
+    String getPreviousTeam() {
         return previousTeam;
     }
 
-    public void setPreviousTeam(String previousTeam) {
+    void setPreviousTeam(String previousTeam) {
         this.previousTeam = previousTeam;
     }
 

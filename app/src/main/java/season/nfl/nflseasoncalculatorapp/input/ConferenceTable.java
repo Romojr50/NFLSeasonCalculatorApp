@@ -1,7 +1,6 @@
 package season.nfl.nflseasoncalculatorapp.input;
 
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -15,9 +14,9 @@ import nfl.season.league.Conference;
 
 public class ConferenceTable {
 
-    protected static final int POSITION_OF_TEAM_SELECT = 1;
+    static final int POSITION_OF_TEAM_SELECT = 1;
 
-    protected static final int POSITION_OF_SEED_SELECT = 2;
+    static final int POSITION_OF_SEED_SELECT = 2;
 
     private TableLayout conferenceTableLayout;
 

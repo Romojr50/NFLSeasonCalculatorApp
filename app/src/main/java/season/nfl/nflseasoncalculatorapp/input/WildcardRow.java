@@ -5,8 +5,6 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class WildcardRow {
 
     private TableRow wildcardRowView;
@@ -17,7 +15,7 @@ public class WildcardRow {
         this.wildcardRowView = wildcardRowView;
     }
 
-    public TableRow getWildcardRowView() {
+    TableRow getWildcardRowView() {
         return wildcardRowView;
     }
 
@@ -46,11 +44,11 @@ public class WildcardRow {
         return seed;
     }
 
-    public String getPreviousTeam() {
+    String getPreviousTeam() {
         return previousTeam;
     }
 
-    public void setPreviousTeam(String previousTeam) {
+    void setPreviousTeam(String previousTeam) {
         this.previousTeam = previousTeam;
     }
 
