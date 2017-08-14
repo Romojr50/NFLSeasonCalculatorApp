@@ -19,9 +19,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import nfl.season.input.NFLFileWriterFactory;
+import nfl.season.input.NFLPlayoffSettings;
+import nfl.season.input.NFLTeamSettings;
 import nfl.season.league.Conference;
 import nfl.season.league.Division;
 import nfl.season.league.League;
@@ -35,6 +40,7 @@ import season.nfl.nflseasoncalculatorapp.input.ConferenceTable;
 import season.nfl.nflseasoncalculatorapp.input.DivisionChampRow;
 import season.nfl.nflseasoncalculatorapp.input.WildcardRow;
 import season.nfl.nflseasoncalculatorapp.util.InputSetter;
+import season.nfl.nflseasoncalculatorapp.util.MessageDisplayer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,9 +62,15 @@ public class PlayoffsFragment extends Fragment {
 
     private NFLPlayoffs playoffs;
 
+    private NFLPlayoffSettings playoffSettings;
+
+    private NFLFileWriterFactory fileWriterFactory;
+
     private List<ConferenceTable> conferenceTables;
 
     private OnFragmentInteractionListener mListener;
+
+    private String folderPath;
 
     public PlayoffsFragment() {
         // Required empty public constructor
@@ -107,6 +119,8 @@ public class PlayoffsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
         final Activity activity = getActivity();
+        fileWriterFactory = new NFLFileWriterFactory();
+        playoffSettings = new NFLPlayoffSettings();
 
         LinearLayout selectPlayoffTeamsLayout = (LinearLayout) view.findViewById(R.id.selectPlayoffTeamsLayout);
 
@@ -139,6 +153,19 @@ public class PlayoffsFragment extends Fragment {
             conferenceLayout.setPadding(0, 0, 0, CONFERENCE_PADDING);
             conferenceTables.add(conferenceTable);
         }
+
+        Button savePlayoffSettingsButton = (Button) activity.findViewById(R.id.savePlayoffSettingsButton);
+        savePlayoffSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    playoffSettings.saveToSettingsFile(playoffs, folderPath, fileWriterFactory);
+                    MessageDisplayer.displayMessage(activity, "Playoff Teams Saved");
+                } catch (IOException e) {
+                    MessageDisplayer.displayMessage(activity, "Playoff Teams Save FAILED");
+                }
+            }
+        });
 
         Button generateTableButton = (Button) activity.findViewById(R.id.generatePlayoffTableButton);
         generateTableButton.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +226,8 @@ public class PlayoffsFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            File fileDir = context.getFilesDir();
+            folderPath = fileDir.getAbsolutePath();
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -265,7 +294,7 @@ public class PlayoffsFragment extends Fragment {
             divisionChampLabel.setText(divisionChampLabelString);
             divisionRow.addView(divisionChampLabel);
 
-            addDivisionChampSpinnersToDivisionRow(activity, divisionRow, divisions, i);
+            addDivisionChampSpinnersToDivisionRow(activity, divisionRow, leagueConference, i);
 
             DivisionChampRow divisionChampRow = new DivisionChampRow(division, divisionRow);
             conferenceTable.addDivisionChampRow(divisionChampRow);
@@ -354,22 +383,38 @@ public class PlayoffsFragment extends Fragment {
         return textView;
     }
 
-    private void addDivisionChampSpinnersToDivisionRow(Activity activity, TableRow divisionRow,
-                                                       List<Division> divisions, int divisionIndex) {
+    private void addDivisionChampSpinnersToDivisionRow(
+            Activity activity, TableRow divisionRow, Conference conference, int divisionIndex) {
+        String conferenceName = conference.getName();
+        List<Division> divisions = conference.getDivisions();
         Division division = divisions.get(divisionIndex);
 
         List<Team> teams = division.getTeams();
         Spinner selectDivisionChamp = new Spinner(activity);
         divisionRow.addView(selectDivisionChamp);
 
+        String divisionWinnerName = "";
+        int divisionWinnerSeed = -1;
+        NFLPlayoffTeam divisionWinner = playoffs.getDivisionWinner(conferenceName, division.getName());
+        if (divisionWinner != null) {
+            Team divisionWinnerLeague = divisionWinner.getTeam();
+            divisionWinnerName = divisionWinnerLeague.getName();
+            divisionWinnerSeed = divisionWinner.getConferenceSeed();
+        }
+
+        int divisionWinnerIndex = 0;
         String[] teamNames = new String[teams.size()];
         for (int j = 0; j < teams.size(); j++) {
             Team team = teams.get(j);
             teamNames[j] = team.getName();
+            if (divisionWinnerSeed > -1 && divisionWinnerName.equals(team.getName())) {
+                divisionWinnerIndex = j;
+            }
         }
         ArrayAdapter<String> teamAdapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_spinner_item, teamNames);
         selectDivisionChamp.setAdapter(teamAdapter);
+        selectDivisionChamp.setSelection(divisionWinnerIndex);
 
         Spinner selectSeed = new Spinner(activity);
         Integer[] divisionChampSeeds = new Integer[divisions.size()];
@@ -379,7 +424,11 @@ public class PlayoffsFragment extends Fragment {
         ArrayAdapter<Integer> seedAdapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_spinner_item, divisionChampSeeds);
         selectSeed.setAdapter(seedAdapter);
-        selectSeed.setSelection(divisionIndex);
+        if (divisionWinnerSeed > -1) {
+            selectSeed.setSelection(divisionWinnerSeed - 1);
+        } else {
+            selectSeed.setSelection(divisionIndex);
+        }
         divisionRow.addView(selectSeed);
     }
 
@@ -393,17 +442,33 @@ public class PlayoffsFragment extends Fragment {
         wildcardLabel.setText(wildcardLabelString);
         wildcardRow.addView(wildcardLabel);
 
+        String wildcardName = "";
+        NFLPlayoffTeam playoffWildcard = playoffs.getTeamByConferenceSeed(conferenceName, 5 + wildcardIndex);
+        if (playoffWildcard != null) {
+            Team leagueWildcard = playoffWildcard.getTeam();
+            wildcardName = leagueWildcard.getName();
+        }
+
         Spinner selectWildcard = new Spinner(activity);
         List<Team> conferenceTeams = leagueConference.getTeams();
         String[] conferenceTeamNames = new String[conferenceTeams.size()];
+
+        int selectedIndex = -1;
         for (int j = 0; j < conferenceTeams.size(); j++) {
             Team conferenceTeam = conferenceTeams.get(j);
+            if (!"".equals(wildcardName) && wildcardName.equals(conferenceTeam.getName())) {
+                selectedIndex = j;
+            }
             conferenceTeamNames[j] = conferenceTeam.getName();
         }
         ArrayAdapter<String> wildcardAdapter = new ArrayAdapter<>(activity,
                 android.R.layout.simple_spinner_item, conferenceTeamNames);
         selectWildcard.setAdapter(wildcardAdapter);
-        selectWildcard.setSelection(wildcardIndex + 1);
+        if (selectedIndex > -1) {
+            selectWildcard.setSelection(selectedIndex);
+        } else {
+            selectWildcard.setSelection(wildcardIndex + 1);
+        }
         wildcardRow.addView(selectWildcard);
 
         TextView wildcardSeed = new TextView(activity);

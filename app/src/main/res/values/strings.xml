@@ -47,6 +47,8 @@
     <string name="save_and_back">Save and Back</string>
 
     <!-- Playoff Strings -->
+    <string name="save_playoff_settings">Save Playoff Settings to Memory</string>
+
     <string name="division_wildcard">Div /\nWildcard</string>
     <string name="seed">Seed</string>
     <string name="division_champion">%s Champ</string>

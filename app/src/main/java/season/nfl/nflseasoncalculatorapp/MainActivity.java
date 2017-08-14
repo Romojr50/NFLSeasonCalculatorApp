@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nfl.season.input.NFLFileReaderFactory;
+import nfl.season.input.NFLPlayoffSettings;
 import nfl.season.input.NFLTeamSettings;
 import nfl.season.league.League;
 import nfl.season.playoffs.NFLPlayoffs;
@@ -59,17 +60,26 @@ public class MainActivity extends AppCompatActivity
         League nfl = new League(League.NFL);
         nfl.initializeNFL();
 
+        NFLPlayoffs playoffs = new NFLPlayoffs(nfl);
+        playoffs.initializeNFLPlayoffs();
+
         Context context = getApplicationContext();
         File fileDir = context.getFilesDir();
         String folderPath = fileDir.getAbsolutePath();
 
         NFLFileReaderFactory fileReaderFactory = new NFLFileReaderFactory();
         NFLTeamSettings teamSettings = new NFLTeamSettings();
+        NFLPlayoffSettings playoffSettings = new NFLPlayoffSettings();
         try {
             String teamSettingsString = teamSettings.loadSettingsFile(folderPath, fileReaderFactory);
             if (teamSettingsString != null && !"".equals(teamSettingsString)) {
                 teamSettings.setTeamsSettingsFromTeamSettingsFileString(nfl,
                         teamSettingsString);
+            }
+
+            String playoffSettingsString = playoffSettings.loadSettingsFile(folderPath, fileReaderFactory);
+            if (playoffSettingsString != null && !"".equals(playoffSettingsString)) {
+                playoffSettings.loadPlayoffSettingsString(playoffs, nfl, playoffSettingsString);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         Bundle fragmentArgs = new Bundle();
         fragmentArgs.putSerializable(LEAGUE_KEY, nfl);
 
-        setUpAdapter(adapter, nfl);
+        setUpAdapter(adapter, nfl, playoffs);
         viewPager.setAdapter(adapter);
     }
 
@@ -121,12 +131,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void setUpAdapter(ViewPagerAdapter adapter, League nfl) {
+    private void setUpAdapter(ViewPagerAdapter adapter, League nfl, NFLPlayoffs playoffs) {
         TeamsFragment teamsFragment = TeamsFragment.newInstance(nfl, null);
         SeasonFragment seasonFragment = new SeasonFragment();
 
-        NFLPlayoffs playoffs = new NFLPlayoffs(nfl);
-        playoffs.initializeNFLPlayoffs();
         PlayoffsFragment playoffsFragment = PlayoffsFragment.newInstance(nfl, playoffs);
 
         adapter.addFragment(teamsFragment, "Teams");

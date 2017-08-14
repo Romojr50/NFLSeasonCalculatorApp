@@ -257,22 +257,25 @@ public class ConferenceTable {
     }
 
     private int findNextIndexForOtherWildcard(WildcardRow wildcardRow, Spinner otherWildcardTeamSpinner, int position, AdapterView<?> parentView) {
+        int nextIndex = 0;
         boolean foundNextIndex = false;
         String previousSelected = wildcardRow.getPreviousTeam();
-        int nextIndex = getIndexOfItemInSpinner(otherWildcardTeamSpinner, previousSelected);
-        while (!foundNextIndex) {
-            if (nextIndex != position) {
-                String nextSelected = parentView.getItemAtPosition(nextIndex).toString();
-                Spinner divisionChampWithIndex = getPreviousDivisionChampSpinnerWtihSelected(
-                        nextSelected, -1, POSITION_OF_TEAM_SELECT);
-                if (divisionChampWithIndex == null) {
-                    foundNextIndex = true;
-                    break;
+        if (previousSelected != null && !"".equals(previousSelected)) {
+            nextIndex = getIndexOfItemInSpinner(otherWildcardTeamSpinner, previousSelected);
+            while (!foundNextIndex) {
+                if (nextIndex != position) {
+                    String nextSelected = parentView.getItemAtPosition(nextIndex).toString();
+                    Spinner divisionChampWithIndex = getPreviousDivisionChampSpinnerWtihSelected(
+                            nextSelected, -1, POSITION_OF_TEAM_SELECT);
+                    if (divisionChampWithIndex == null) {
+                        foundNextIndex = true;
+                        break;
+                    }
                 }
-            }
-            nextIndex++;
-            if (nextIndex >= parentView.getCount()) {
-                nextIndex = 0;
+                nextIndex++;
+                if (nextIndex >= parentView.getCount()) {
+                    nextIndex = 0;
+                }
             }
         }
 

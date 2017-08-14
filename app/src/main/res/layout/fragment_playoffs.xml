@@ -16,6 +16,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <Button
+                android:id="@+id/savePlayoffSettingsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/save_playoff_settings" />
+
             <LinearLayout
                 android:id="@+id/selectPlayoffTeamsLayout"
                 android:layout_width="match_parent"
