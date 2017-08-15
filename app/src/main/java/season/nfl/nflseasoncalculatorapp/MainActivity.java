@@ -133,8 +133,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setUpAdapter(ViewPagerAdapter adapter, League nfl, NFLPlayoffs playoffs) {
         TeamsFragment teamsFragment = TeamsFragment.newInstance(nfl, null);
-        SeasonFragment seasonFragment = new SeasonFragment();
-
+        SeasonFragment seasonFragment = SeasonFragment.newInstance(nfl);
         PlayoffsFragment playoffsFragment = PlayoffsFragment.newInstance(nfl, playoffs);
 
         adapter.addFragment(teamsFragment, "Teams");
