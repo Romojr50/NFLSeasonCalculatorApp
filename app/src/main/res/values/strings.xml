@@ -61,7 +61,9 @@
     <string name="super_bowl_label">SB\nChamps</string>
 
     <!-- Season Strings -->
+    <string name="view">View</string>
     <string name="load_regular_season">Load Regular Season From Internet</string>
+    <string name="view_week">View Week</string>
 
     <string name="display_one_number">%d</string>
     <plurals name="display_number">

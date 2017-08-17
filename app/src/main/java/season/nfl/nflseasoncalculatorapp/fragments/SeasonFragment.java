@@ -1,16 +1,29 @@
 package season.nfl.nflseasoncalculatorapp.fragments;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
+import nfl.season.input.NFLFileWriterFactory;
+import nfl.season.input.NFLRegularSeasonSave;
 import nfl.season.league.League;
+import nfl.season.scorestrip.ScoreStripMapper;
+import nfl.season.scorestrip.ScoreStripReader;
+import nfl.season.season.NFLSeason;
+import nfl.season.season.SeasonWeek;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
+import season.nfl.nflseasoncalculatorapp.util.LoadSeasonTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,7 +35,11 @@ import season.nfl.nflseasoncalculatorapp.R;
  */
 public class SeasonFragment extends Fragment {
 
+    private static final String SEASON_KEY = "NFL_Season";
+
     private League nfl;
+
+    private NFLSeason season;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,10 +54,11 @@ public class SeasonFragment extends Fragment {
      * @param nfl League
      * @return A new instance of fragment SeasonFragment.
      */
-    public static SeasonFragment newInstance(League nfl) {
+    public static SeasonFragment newInstance(League nfl, NFLSeason season) {
         SeasonFragment fragment = new SeasonFragment();
         Bundle args = new Bundle();
         args.putSerializable(MainActivity.LEAGUE_KEY, nfl);
+        args.putSerializable(SEASON_KEY, season);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,6 +68,7 @@ public class SeasonFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             nfl = (League) getArguments().getSerializable(MainActivity.LEAGUE_KEY);
+            season = (NFLSeason) getArguments().getSerializable(SEASON_KEY);
         }
     }
 
@@ -58,6 +77,14 @@ public class SeasonFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_season, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
+        final Activity activity = getActivity();
+        setLoadSeasonButtonListener(activity);
+        setUpPickWeekSpinner(activity);
+        setViewWeekButton(activity);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -97,5 +124,45 @@ public class SeasonFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void setLoadSeasonButtonListener(final Activity activity) {
+        Button loadSeasonButton = (Button) activity.findViewById(R.id.loadSeasonButton);
+        loadSeasonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //ProgressDialog progress = new ProgressDialog(activity);
+                //progress.setTitle("Loading");
+                //progress.setMessage("Loading NFL season...");
+                //progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+                //progress.show();
+                new LoadSeasonTask().execute(season);
+                //progress.dismiss();
+            }
+        });
+    }
+
+    private void setUpPickWeekSpinner(Activity activity) {
+        Spinner pickWeekSpinner = (Spinner) activity.findViewById(R.id.pickWeekSpinner);
+        SeasonWeek[] weeks = season.getWeeks();
+        Integer[] weekNumbers = new Integer[weeks.length];
+        for (int i = 1; i <= weeks.length; i++) {
+            weekNumbers[i - 1] = i;
+        }
+        ArrayAdapter<Integer> pickWeekAdapter = new ArrayAdapter<>(
+                activity, android.R.layout.simple_spinner_item, weekNumbers);
+        pickWeekSpinner.setAdapter(pickWeekAdapter);
+    }
+
+    private void setViewWeekButton(final Activity activity) {
+        Button viewWeekButton = (Button) activity.findViewById(R.id.viewWeekButton);
+        viewWeekButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Spinner pickWeekSpinner = (Spinner) activity.findViewById(R.id.pickWeekSpinner);
+                Object selectedWeekObject = pickWeekSpinner.getSelectedItem();
+                Integer selectedWeek = (Integer) selectedWeekObject;
+            }
+        });
     }
 }

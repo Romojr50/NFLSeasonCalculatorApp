@@ -24,6 +24,7 @@ import nfl.season.input.NFLPlayoffSettings;
 import nfl.season.input.NFLTeamSettings;
 import nfl.season.league.League;
 import nfl.season.playoffs.NFLPlayoffs;
+import nfl.season.season.NFLSeason;
 import season.nfl.nflseasoncalculatorapp.fragments.AllTeamsFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.PlayoffsFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.SeasonFragment;
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity
         NFLPlayoffs playoffs = new NFLPlayoffs(nfl);
         playoffs.initializeNFLPlayoffs();
 
+        NFLSeason season = new NFLSeason();
+        season.initializeNFLRegularSeason(nfl);
+
         Context context = getApplicationContext();
         File fileDir = context.getFilesDir();
         String folderPath = fileDir.getAbsolutePath();
@@ -88,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         Bundle fragmentArgs = new Bundle();
         fragmentArgs.putSerializable(LEAGUE_KEY, nfl);
 
-        setUpAdapter(adapter, nfl, playoffs);
+        setUpAdapter(adapter, nfl, playoffs, season);
         viewPager.setAdapter(adapter);
     }
 
@@ -131,9 +135,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void setUpAdapter(ViewPagerAdapter adapter, League nfl, NFLPlayoffs playoffs) {
+    private void setUpAdapter(
+            ViewPagerAdapter adapter, League nfl, NFLPlayoffs playoffs, NFLSeason season) {
         TeamsFragment teamsFragment = TeamsFragment.newInstance(nfl, null);
-        SeasonFragment seasonFragment = SeasonFragment.newInstance(nfl);
+        SeasonFragment seasonFragment = SeasonFragment.newInstance(nfl, season);
         PlayoffsFragment playoffsFragment = PlayoffsFragment.newInstance(nfl, playoffs);
 
         adapter.addFragment(teamsFragment, "Teams");
