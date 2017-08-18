@@ -64,6 +64,15 @@
     <string name="view">View</string>
     <string name="load_regular_season">Load Regular Season From Internet</string>
     <string name="view_week">View Week</string>
+    <string name="simulate_seasons">Display Season Probabilities</string>
+
+    <string name="bottom_5_label">Bot\n5</string>
+    <string name="division_cellar_label">Div\nLast</string>
+    <string name="winning_season_label">Win\nSeas</string>
+    <string name="playoff_label">Play-\noffs</string>
+    <string name="division_champion_label">Div\nChamp</string>
+    <string name="round_one_bye_label">Rnd 1\nBye</string>
+    <string name="one_seed_label">#1\nSeed</string>
 
     <string name="display_one_number">%d</string>
     <plurals name="display_number">

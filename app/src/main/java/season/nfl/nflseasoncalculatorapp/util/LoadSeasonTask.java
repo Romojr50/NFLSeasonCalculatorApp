@@ -13,6 +13,16 @@ import nfl.season.season.NFLSeason;
 
 public class LoadSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
+    public interface LoadAsyncResponse {
+        void processFinish(String output);
+    }
+
+    public LoadAsyncResponse delegate = null;
+
+    public LoadSeasonTask(LoadAsyncResponse delegate){
+        this.delegate = delegate;
+    }
+
     protected String doInBackground(NFLSeason... seasons) {
         NFLSeason season = null;
         if (seasons.length == 1) {
@@ -33,6 +43,11 @@ public class LoadSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         }
 
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        delegate.processFinish(result);
     }
 
 }

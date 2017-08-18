@@ -12,18 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import nfl.season.input.NFLFileWriterFactory;
 import nfl.season.input.NFLRegularSeasonSave;
 import nfl.season.league.League;
+import nfl.season.playoffs.NFLPlayoffs;
 import nfl.season.scorestrip.ScoreStripMapper;
 import nfl.season.scorestrip.ScoreStripReader;
+import nfl.season.season.NFLManySeasonSimulator;
 import nfl.season.season.NFLSeason;
+import nfl.season.season.NFLTiebreaker;
 import nfl.season.season.SeasonWeek;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
 import season.nfl.nflseasoncalculatorapp.util.LoadSeasonTask;
+import season.nfl.nflseasoncalculatorapp.util.MessageDisplayer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,6 +91,7 @@ public class SeasonFragment extends Fragment {
         setLoadSeasonButtonListener(activity);
         setUpPickWeekSpinner(activity);
         setViewWeekButton(activity);
+        setSimulateSeasonsButton(activity);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -131,13 +138,21 @@ public class SeasonFragment extends Fragment {
         loadSeasonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ProgressDialog progress = new ProgressDialog(activity);
-                //progress.setTitle("Loading");
-                //progress.setMessage("Loading NFL season...");
-                //progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-                //progress.show();
-                new LoadSeasonTask().execute(season);
-                //progress.dismiss();
+                final ProgressDialog progress = new ProgressDialog(activity);
+                progress.setTitle("Loading");
+                progress.setMessage("Loading NFL season...");
+                progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+                progress.show();
+                LoadSeasonTask.LoadAsyncResponse loadAsyncResponse = new LoadSeasonTask.LoadAsyncResponse(){
+                    @Override
+                    public void processFinish(String output){
+                        progress.dismiss();
+                        LinearLayout seasonOperationLayout = (LinearLayout) activity.findViewById(R.id.seasonOperationLayout);
+                        seasonOperationLayout.setVisibility(View.VISIBLE);
+                    }
+                };
+                LoadSeasonTask loadSeasonTask = new LoadSeasonTask(loadAsyncResponse);
+                loadSeasonTask.execute(season);
             }
         });
     }
@@ -161,7 +176,35 @@ public class SeasonFragment extends Fragment {
             public void onClick(View v) {
                 Spinner pickWeekSpinner = (Spinner) activity.findViewById(R.id.pickWeekSpinner);
                 Object selectedWeekObject = pickWeekSpinner.getSelectedItem();
-                Integer selectedWeek = (Integer) selectedWeekObject;
+                Integer selectedWeekNumber = (Integer) selectedWeekObject;
+                SeasonWeek selectedWeek = season.getWeek(selectedWeekNumber);
+                String selectedWeekString = season.getWeekString(selectedWeek);
+
+                TextView viewWeekDisplay = (TextView) activity.findViewById(R.id.viewWeekDisplay);
+                viewWeekDisplay.setText(selectedWeekString);
+            }
+        });
+    }
+
+    private void setSimulateSeasonsButton(final Activity activity) {
+        Button simulateSeasonsButton = (Button) activity.findViewById(R.id.simulateSeasonsButton);
+        simulateSeasonsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProgressDialog progress = new ProgressDialog(activity);
+                progress.setTitle("Simulating");
+                progress.setMessage("Simulating 10,000 NFL Seasons...");
+                progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+                progress.show();
+
+                season.clearSimulatedResults();
+                NFLManySeasonSimulator manySeasonSimulator = season.createManySeasonsSimulator();
+                NFLTiebreaker tiebreaker = new NFLTiebreaker(season);
+                NFLPlayoffs playoffs = new NFLPlayoffs(nfl);
+                playoffs.initializeNFLPlayoffs();
+                manySeasonSimulator.simulateManySeasons(tiebreaker, playoffs, 10);
+
+                progress.dismiss();
             }
         });
     }
