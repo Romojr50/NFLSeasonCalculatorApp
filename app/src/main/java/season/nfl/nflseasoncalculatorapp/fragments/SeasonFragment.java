@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import nfl.season.input.NFLFileWriterFactory;
@@ -30,6 +32,7 @@ import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
 import season.nfl.nflseasoncalculatorapp.util.LoadSeasonTask;
 import season.nfl.nflseasoncalculatorapp.util.MessageDisplayer;
+import season.nfl.nflseasoncalculatorapp.util.SimulateSeasonTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -191,20 +194,11 @@ public class SeasonFragment extends Fragment {
         simulateSeasonsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progress = new ProgressDialog(activity);
-                progress.setTitle("Simulating");
-                progress.setMessage("Simulating 10,000 NFL Seasons...");
-                progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-                progress.show();
-
-                season.clearSimulatedResults();
-                NFLManySeasonSimulator manySeasonSimulator = season.createManySeasonsSimulator();
-                NFLTiebreaker tiebreaker = new NFLTiebreaker(season);
-                NFLPlayoffs playoffs = new NFLPlayoffs(nfl);
-                playoffs.initializeNFLPlayoffs();
-                manySeasonSimulator.simulateManySeasons(tiebreaker, playoffs, 10);
-
-                progress.dismiss();
+                ProgressBar simulateProgress = (ProgressBar) activity.findViewById(R.id.seasonProgress);
+                TableLayout simulateSeasonTable = (TableLayout) activity.findViewById(R.id.simulateSeasonsTable);
+                simulateSeasonTable.setVisibility(View.VISIBLE);
+                SimulateSeasonTask simulateSeasonTask = new SimulateSeasonTask(simulateProgress, activity, simulateSeasonTable);
+                simulateSeasonTask.execute(season);
             }
         });
     }
