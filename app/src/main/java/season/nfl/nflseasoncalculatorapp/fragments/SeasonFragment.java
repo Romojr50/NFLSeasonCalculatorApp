@@ -196,7 +196,6 @@ public class SeasonFragment extends Fragment {
             public void onClick(View v) {
                 ProgressBar simulateProgress = (ProgressBar) activity.findViewById(R.id.seasonProgress);
                 TableLayout simulateSeasonTable = (TableLayout) activity.findViewById(R.id.simulateSeasonsTable);
-                simulateSeasonTable.setVisibility(View.VISIBLE);
                 SimulateSeasonTask simulateSeasonTask = new SimulateSeasonTask(simulateProgress, activity, simulateSeasonTable);
                 simulateSeasonTask.execute(season);
             }

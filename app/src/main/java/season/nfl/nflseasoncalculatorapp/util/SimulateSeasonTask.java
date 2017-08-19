@@ -2,6 +2,7 @@ package season.nfl.nflseasoncalculatorapp.util;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
@@ -18,7 +19,7 @@ import nfl.season.season.NFLTiebreaker;
 
 public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
-    public static final int NUMBER_OF_HUNDRED_SIMULATIONS = 20;
+    public static final double NUMBER_OF_HUNDRED_SIMULATIONS = 20.0;
 
     public static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
 
@@ -49,7 +50,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
         for (int i = 0; i < 100; i++) {
             publishProgress(i);
-            manySeasonSimulator.simulateManySeasons(tiebreaker, playoffs, NUMBER_OF_HUNDRED_SIMULATIONS);
+            manySeasonSimulator.simulateManySeasons(tiebreaker, playoffs, (int) NUMBER_OF_HUNDRED_SIMULATIONS);
         }
         return null;
     }
@@ -67,6 +68,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         progressBar.setVisibility(View.GONE);
+        simulateSeasonsTable.setVisibility(View.VISIBLE);
         while(simulateSeasonsTable.getChildCount() > 1) {
             simulateSeasonsTable.removeViewAt(1);
         }
@@ -81,44 +83,49 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
             teamLabel.setText(teamName);
             teamRow.addView(teamLabel);
 
-            TextView bottomLabel = new TextView(activity);
-            String bottomPercent = getPercentText(seasonTeam.getWasBottomTeam());
-            bottomLabel.setText(bottomPercent);
-            teamRow.addView(bottomLabel);
-
-            TextView cellarLabel = new TextView(activity);
-            String cellarPercent = getPercentText(seasonTeam.getWasInDivisionCellar());
-            cellarLabel.setText(cellarPercent);
-            teamRow.addView(cellarLabel);
-
-            TextView winningLabel = new TextView(activity);
-            String winningPercent = getPercentText(seasonTeam.getHadWinningSeason());
-            winningLabel.setText(winningPercent);
-            teamRow.addView(winningLabel);
-
-            TextView playoffsLabel = new TextView(activity);
-            String playoffsPercent = getPercentText(seasonTeam.getMadePlayoffs());
-            playoffsLabel.setText(playoffsPercent);
-            teamRow.addView(playoffsLabel);
-
-            TextView divisionChampLabel = new TextView(activity);
-            String divisionChampPercent = getPercentText(seasonTeam.getWonDivision());
-            divisionChampLabel.setText(divisionChampPercent);
-            teamRow.addView(divisionChampLabel);
-
-            TextView roundOneLabel = new TextView(activity);
-            String roundOnePercent = getPercentText(seasonTeam.getGotRoundOneBye());
-            roundOneLabel.setText(roundOnePercent);
-            teamRow.addView(roundOneLabel);
-
-            TextView oneSeedLabel = new TextView(activity);
+            addCellToRowWithValue(teamRow, activity, seasonTeam.getWasBottomTeam());
+            addCellToRowWithValue(teamRow, activity, seasonTeam.getWasInDivisionCellar());
+            addCellToRowWithValue(teamRow, activity, seasonTeam.getHadWinningSeason());
+            addCellToRowWithValue(teamRow, activity, seasonTeam.getMadePlayoffs());
+            addCellToRowWithValue(teamRow, activity, seasonTeam.getWonDivision());
+            addCellToRowWithValue(teamRow, activity, seasonTeam.getGotRoundOneBye());
+            addCellToRowWithValue(teamRow, activity, seasonTeam.getGotOneSeed());
+            addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToMakeDivisionalRound());
+            addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToMakeConferenceRound());
+            addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToWinConference());
+            addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToWinSuperBowl());
 
             simulateSeasonsTable.addView(teamRow);
         }
     }
 
+    private void addCellToRowWithValue(TableRow teamRow, Activity activity, int value) {
+        TextView percentLabel = new TextView(activity);
+        String percentText = getPercentText(value);
+        percentLabel.setText(percentText);
+        teamRow.addView(percentLabel);
+    }
+
+    private void addCellToRowWithPercent(TableRow teamRow, Activity activity, int value) {
+        TextView percentLabel = new TextView(activity);
+        String percentText = getPercentTextFromPercent(value);
+        percentLabel.setText(percentText);
+        teamRow.addView(percentLabel);
+    }
+
     private String getPercentText(int numberOfOccurrences) {
-        int percent = Math.round(numberOfOccurrences / NUMBER_OF_HUNDRED_SIMULATIONS);
+        //TODO: Rounding errors keep resulting is lower percents?
+        int percent = (int) Math.round(numberOfOccurrences / NUMBER_OF_HUNDRED_SIMULATIONS);
+        return getTextFromPercent(percent);
+    }
+
+    private String getPercentTextFromPercent(int totalPercent) {
+        int percent = (int) Math.round(totalPercent / NUMBER_OF_SIMULATIONS);
+        return getTextFromPercent(percent);
+    }
+
+    @NonNull
+    private String getTextFromPercent(int percent) {
         String percentText = "" + percent;
         if (percent == 0) {
             percentText = "< 1";
