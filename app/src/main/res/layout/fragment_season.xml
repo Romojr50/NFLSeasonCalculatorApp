@@ -69,18 +69,19 @@
                     android:id="@+id/seasonProgress"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
 
                 <HorizontalScrollView
                     android:id="@+id/simulateScroll"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
 
                     <TableLayout
                         android:id="@+id/simulateSeasonsTable"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:visibility="invisible">
+                        android:layout_height="775dp">
 
                         <TableRow
                             android:id="@+id/simulateSeasonsLabels"
