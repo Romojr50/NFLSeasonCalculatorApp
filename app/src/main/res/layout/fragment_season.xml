@@ -95,6 +95,20 @@
                                 android:text="@string/select_team_short" />
 
                             <TextView
+                                android:id="@+id/averageWinsLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="8dp"
+                                android:text="@string/average_wins" />
+
+                            <TextView
+                                android:id="@+id/averageLossesLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="8dp"
+                                android:text="@string/average_losses" />
+
+                            <TextView
                                 android:id="@+id/bottomLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

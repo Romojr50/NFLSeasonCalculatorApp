@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,18 +144,17 @@ public class SeasonFragment extends Fragment {
             public void onClick(View v) {
                 final ProgressDialog progress = new ProgressDialog(activity);
                 progress.setTitle("Loading");
-                progress.setMessage("Loading NFL season...");
+                progress.setMessage("Loading NFL season from internet...");
                 progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
                 progress.show();
                 LoadSeasonTask.LoadAsyncResponse loadAsyncResponse = new LoadSeasonTask.LoadAsyncResponse(){
                     @Override
                     public void processFinish(String output){
                         progress.dismiss();
-                        LinearLayout seasonOperationLayout = (LinearLayout) activity.findViewById(R.id.seasonOperationLayout);
-                        seasonOperationLayout.setVisibility(View.VISIBLE);
+                        MessageDisplayer.displayMessage(activity, output);
                     }
                 };
-                LoadSeasonTask loadSeasonTask = new LoadSeasonTask(loadAsyncResponse);
+                LoadSeasonTask loadSeasonTask = new LoadSeasonTask(loadAsyncResponse, activity);
                 loadSeasonTask.execute(season);
             }
         });

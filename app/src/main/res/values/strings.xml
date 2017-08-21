@@ -66,6 +66,8 @@
     <string name="view_week">View Week</string>
     <string name="simulate_seasons">Display Season Probabilities</string>
 
+    <string name="average_wins">Avg\nWins</string>
+    <string name="average_losses">Avg\nLosses</string>
     <string name="bottom_5_label">Bot\n5</string>
     <string name="division_cellar_label">Div\nLast</string>
     <string name="winning_season_label">Win\nSeas</string>

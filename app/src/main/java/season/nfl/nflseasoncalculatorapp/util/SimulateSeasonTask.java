@@ -112,6 +112,8 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
                     teamLabel.setText(teamName);
                     teamRow.addView(teamLabel);
 
+                    addCellToRowWithPercent(teamRow, activity, seasonTeam.getSimulatedWins());
+                    addCellToRowWithPercent(teamRow, activity, seasonTeam.getSimulatedLosses());
                     addCellToRowWithValue(teamRow, activity, seasonTeam.getWasBottomTeam());
                     addCellToRowWithValue(teamRow, activity, seasonTeam.getWasInDivisionCellar());
                     addCellToRowWithValue(teamRow, activity, seasonTeam.getHadWinningSeason());
