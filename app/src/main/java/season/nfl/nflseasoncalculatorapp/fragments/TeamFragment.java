@@ -129,6 +129,7 @@ public class TeamFragment extends Fragment {
     }
 
     private void setUpButtons(final Activity activity) {
+        setUpDefaultButton(activity);
         setUpBackButton(activity);
         setUpSaveButton(activity);
         setUpSaveTeamSettingsButton(activity);
@@ -184,7 +185,7 @@ public class TeamFragment extends Fragment {
     private void setUpBackButton(final Activity activity) {
         final Resources resources = activity.getResources();
 
-        final Button backButton = (Button) activity.findViewById(R.id.backButton);
+        final Button backButton = (Button) activity.findViewById(R.id.cancelButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final EditText powerRankingsInput = (EditText) activity.findViewById(R.id.powerRankingsInput);
@@ -205,6 +206,17 @@ public class TeamFragment extends Fragment {
                     setMatchupSettingsOntoMatchups(activity);
                     goBackToAllTeamsFragment();
                 }
+            }
+        });
+    }
+
+    private void setUpDefaultButton(final Activity activity) {
+        final Button defaultButton = (Button) activity.findViewById(R.id.defaultButton);
+        defaultButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                team.resetToDefaults();
+                setUpInputFields(activity);
+                setMatchupSettingsOntoMatchups(activity);
             }
         });
     }

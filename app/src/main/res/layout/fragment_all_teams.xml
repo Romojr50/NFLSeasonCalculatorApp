@@ -62,6 +62,12 @@
                         android:text="@string/home_field_advantage_all" />
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/defaultAllTeamsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_all_teams" />
+
                 <TextView
                     android:id="@+id/selectTeamLabel"
                     android:layout_width="match_parent"

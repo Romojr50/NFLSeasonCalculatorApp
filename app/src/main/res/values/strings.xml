@@ -8,6 +8,7 @@
     <string name="select_team_short">Team</string>
 
     <string name="save_teams_to_file">Save Current Team Settings to Memory</string>
+    <string name="default_all_teams">Set All Teams Settings to Defaults</string>
 
     <!-- Selected Team Strings -->
     <string name="power_ranking">Power Ranking</string>
@@ -43,8 +44,10 @@
         <item>@string/home_field_advantage_mode</item>
     </string-array>
 
+    <string name="default_team">Set Team Settings to Default</string>
     <string name="back">Back</string>
-    <string name="save_and_back">Save and Back</string>
+    <string name="cancel">Cancel and Back</string>
+    <string name="save_temp_settings">Save Settings and Back</string>
 
     <!-- Playoff Strings -->
     <string name="save_playoff_settings">Save Playoff Settings to Memory</string>
@@ -75,6 +78,15 @@
     <string name="division_champion_label">Div\nChamp</string>
     <string name="round_one_bye_label">Rnd 1\nBye</string>
     <string name="one_seed_label">#1\nSeed</string>
+
+    <!-- Help Strings -->
+    <string name="getting_started">Getting Started</string>
+    <string name="getting_started_text">
+        The calculations on the Season and Playoffs tabs are based on the settings you save in the Teams tab.\n\n
+        Start by setting either the Power Rankings or Elo Ratings of all teams and calculate all Matchups by the one of the two you choose.\n\n
+        Also set the Home Field Advantage (HFA) of every team as you see fit and calculate all Home/Away Matchups by HFA.\n\n
+        Finally, review any team Matchups. If you do not agree with the calculations made so far set that Matchup to custom and adjust as you see fit.
+    </string>
 
     <string name="display_one_number">%d</string>
     <plurals name="display_number">

@@ -26,6 +26,7 @@ import nfl.season.league.League;
 import nfl.season.playoffs.NFLPlayoffs;
 import nfl.season.season.NFLSeason;
 import season.nfl.nflseasoncalculatorapp.fragments.AllTeamsFragment;
+import season.nfl.nflseasoncalculatorapp.fragments.HelpFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.PlayoffsFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.SeasonFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.TeamFragment;
@@ -34,9 +35,21 @@ import season.nfl.nflseasoncalculatorapp.fragments.TeamsFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TeamsFragment.OnFragmentInteractionListener,
         SeasonFragment.OnFragmentInteractionListener, PlayoffsFragment.OnFragmentInteractionListener,
-        AllTeamsFragment.OnFragmentInteractionListener, TeamFragment.OnFragmentInteractionListener{
+        AllTeamsFragment.OnFragmentInteractionListener, TeamFragment.OnFragmentInteractionListener,
+        HelpFragment.OnFragmentInteractionListener {
 
     public static final String LEAGUE_KEY = "LEAGUE_NFL";
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +107,7 @@ public class MainActivity extends AppCompatActivity
 
         setUpAdapter(adapter, nfl, playoffs, season);
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
     }
 
     @Override
@@ -141,9 +154,11 @@ public class MainActivity extends AppCompatActivity
         TeamsFragment teamsFragment = TeamsFragment.newInstance(nfl, null);
         SeasonFragment seasonFragment = SeasonFragment.newInstance(nfl, season);
         PlayoffsFragment playoffsFragment = PlayoffsFragment.newInstance(nfl, playoffs);
+        HelpFragment helpFragment = HelpFragment.newInstance();
 
         adapter.addFragment(teamsFragment, "Teams");
         adapter.addFragment(seasonFragment, "Season");
         adapter.addFragment(playoffsFragment, "Playoffs");
+        adapter.addFragment(helpFragment, "Help");
     }
 }
