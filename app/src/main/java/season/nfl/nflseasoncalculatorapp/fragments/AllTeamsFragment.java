@@ -139,9 +139,7 @@ public class AllTeamsFragment extends Fragment {
                     Fragment newTeamFragment = TeamFragment.newInstance(nfl, teamName);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.addToBackStack(null);
-                    transaction.hide(AllTeamsFragment.this);
-                    transaction.add(R.id.teams_fragment_holder, newTeamFragment);
-
+                    transaction.replace(R.id.teams_fragment_holder, newTeamFragment);
                     transaction.commit();
                 }
             });
