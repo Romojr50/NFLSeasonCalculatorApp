@@ -19,6 +19,8 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import java.io.File;
+
 import nfl.season.input.NFLFileWriterFactory;
 import nfl.season.input.NFLRegularSeasonSave;
 import nfl.season.league.League;
@@ -50,6 +52,8 @@ public class SeasonFragment extends Fragment {
     private League nfl;
 
     private NFLSeason season;
+
+    private String folderPath;
 
     private OnFragmentInteractionListener mListener;
 
@@ -110,6 +114,8 @@ public class SeasonFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            File fileDir = context.getFilesDir();
+            folderPath = fileDir.getAbsolutePath();
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -154,7 +160,7 @@ public class SeasonFragment extends Fragment {
                         MessageDisplayer.displayMessage(activity, output);
                     }
                 };
-                LoadSeasonTask loadSeasonTask = new LoadSeasonTask(loadAsyncResponse, activity);
+                LoadSeasonTask loadSeasonTask = new LoadSeasonTask(loadAsyncResponse, activity, folderPath);
                 loadSeasonTask.execute(season);
             }
         });

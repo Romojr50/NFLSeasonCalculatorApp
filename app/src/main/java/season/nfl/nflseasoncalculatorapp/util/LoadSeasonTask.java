@@ -28,11 +28,14 @@ public class LoadSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
     private Activity activity;
 
+    private String folderPath;
+
     private boolean success = false;
 
-    public LoadSeasonTask(LoadAsyncResponse delegate, Activity activity){
+    public LoadSeasonTask(LoadAsyncResponse delegate, Activity activity, String folderPath){
         this.delegate = delegate;
         this.activity = activity;
+        this.folderPath = folderPath;
     }
 
     protected String doInBackground(NFLSeason... seasons) {
@@ -50,14 +53,14 @@ public class LoadSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
             NFLRegularSeasonSave seasonSave = new NFLRegularSeasonSave();
             NFLFileWriterFactory fileWriterFactory = new NFLFileWriterFactory();
             try {
-                season.loadSeason(scoreStripReader, scoreStripMapper, seasonSave, fileWriterFactory);
+                season.loadSeason(scoreStripReader, scoreStripMapper, seasonSave, fileWriterFactory, folderPath);
                 success = true;
                 result = "Season Loaded from Internet";
             } catch (Exception e) {
                 e.printStackTrace();
                 NFLFileReaderFactory fileReaderFactory = new NFLFileReaderFactory();
                 try {
-                    String seasonString = seasonSave.loadSeasonSave(fileReaderFactory);
+                    String seasonString = seasonSave.loadSeasonSave(fileReaderFactory, folderPath);
                     seasonSave.populateSeasonFromSeasonString(seasonString, season);
                     success = true;
                     result = "Connection failed; Season Loaded from saved file";

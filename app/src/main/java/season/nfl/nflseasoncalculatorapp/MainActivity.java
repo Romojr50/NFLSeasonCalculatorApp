@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity
 
         setUpAdapter(adapter, nfl, playoffs, season);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
     }
 
     @Override

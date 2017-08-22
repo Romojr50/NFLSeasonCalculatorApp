@@ -23,6 +23,13 @@
                 android:text="Team Fragment"
                 android:textSize="30sp" />
 
+            <ProgressBar
+                android:id="@+id/matchupProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <LinearLayout
                 android:id="@+id/team_form_errors"
                 android:layout_width="match_parent"
