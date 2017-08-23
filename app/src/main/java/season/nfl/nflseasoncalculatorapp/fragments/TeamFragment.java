@@ -214,7 +214,7 @@ public class TeamFragment extends Fragment {
         final Button defaultButton = (Button) activity.findViewById(R.id.defaultButton);
         defaultButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                team.resetToDefaults();
+                nfl.resetTeamToDefault(selectedTeam);
                 setUpInputFields(activity);
                 setMatchupSettingsOntoMatchups(activity);
             }
