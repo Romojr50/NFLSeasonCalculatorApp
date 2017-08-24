@@ -63,7 +63,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="8dp" />
 
             <TextView
                 android:id="@+id/homeFieldLabel"
@@ -80,7 +80,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="8dp" />
 
             <TextView
                 android:id="@+id/sampleEloLabel"
@@ -88,6 +88,324 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sample_elo"
                 android:textSize="24sp" />
+
+            <TableLayout
+                android:id="@+id/sampleEloTable"
+                android:layout_width="match_parent"
+                android:layout_height="315dp">
+
+                <TableRow
+                    android:id="@+id/sampleLabels"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/teamLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_team_short" />
+
+                    <TextView
+                        android:id="@+id/eloEndLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/elo_at_end"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/eloStartLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/elo_at_start"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/bestTeamRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/bestTeamLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/best_team" />
+
+                    <TextView
+                        android:id="@+id/bestTeamEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1743"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/bestTeamStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1662"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/superBowlRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/superBowlLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/super_bowl_champ" />
+
+                    <TextView
+                        android:id="@+id/superBowlEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1712"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/superBowlStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1642"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/runnerUpRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/runnerUpLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/runner_up" />
+
+                    <TextView
+                        android:id="@+id/runnerUpEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1695"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/runnerUpStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1630"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/lostInConferenceRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/lostInConferenceLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/conf_championship" />
+
+                    <TextView
+                        android:id="@+id/lostInConferenceEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1650"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/lostInConferenceStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1600"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/lostInDivisionRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/lostInDivisionLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/divisional_round" />
+
+                    <TextView
+                        android:id="@+id/lostInDivisionEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1614"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/lostInDivisionStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1576"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/lostInWildcardRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/lostInWildcardLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wildcard_round" />
+
+                    <TextView
+                        android:id="@+id/lostInWildcardEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1551"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/lostInWildcardStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1534"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/divisionalChampRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/divisionalChampLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/division_champs" />
+
+                    <TextView
+                        android:id="@+id/divisionalChampEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1621"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/divisionalChampStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1581"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/wildcardTeamRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/wildcardTeamLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wildcard_teams" />
+
+                    <TextView
+                        android:id="@+id/wildcardTeamEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1599"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/wildcardTeamStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1566"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/mediocreRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/mediocreLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mediocre_teams" />
+
+                    <TextView
+                        android:id="@+id/mediocreEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1503"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/mediocreStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1502"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/divisionCellarRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/divisionCellarLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/divisional_cellar" />
+
+                    <TextView
+                        android:id="@+id/divisionCellarEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1379"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/divisionCellarStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1419"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/worstRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/worstLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/worst_team" />
+
+                    <TextView
+                        android:id="@+id/worstEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1262"
+                        android:paddingLeft="20dp"/>
+
+                    <TextView
+                        android:id="@+id/worstStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1346"
+                        android:paddingLeft="20dp"/>
+                </TableRow>
+            </TableLayout>
         </LinearLayout>
     </ScrollView>
 
