@@ -5,23 +5,90 @@
     tools:context="season.nfl.nflseasoncalculatorapp.fragments.HelpFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView3"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/getting_started"
-            android:textSize="24sp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/getting_started_text" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/gettingStartedLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/getting_started"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/gettingStartedHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/getting_started_text" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <TextView
+                android:id="@+id/powerRankingsLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/power_ranking_all"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/powerRankingHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/power_rankings_text" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <TextView
+                android:id="@+id/eloRatingsLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/elo_rating_all"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/eloRatingsHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/elo_ratings_text" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/homeFieldLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home_field_advantage"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/homeFieldHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home_field_advantage_text" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/sampleEloLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_elo"
+                android:textSize="24sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

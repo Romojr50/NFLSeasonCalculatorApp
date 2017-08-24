@@ -82,11 +82,26 @@
     <!-- Help Strings -->
     <string name="getting_started">Getting Started</string>
     <string name="getting_started_text">
-        The calculations on the Season and Playoffs tabs are based on the settings you save in the Teams tab.\n\n
-        Start by setting either the Power Rankings or Elo Ratings of all teams and calculate all Matchups by the one of the two you choose.\n\n
-        Also set the Home Field Advantage (HFA) of every team as you see fit and calculate all Home/Away Matchups by HFA.\n\n
-        Finally, review any team Matchups. If you do not agree with the calculations made so far set that Matchup to custom and adjust as you see fit.
+        The calculations on the Season and Playoffs tabs are based on the settings you save in the Teams tab.
+        \n\nStart by setting either the Power Rankings or Elo Ratings of all teams and calculate all Matchups by the one of the two you choose.
+        \n\nAlso set the Home Field Advantage (HFA) of every team as you see fit and calculate all Home/Away Matchups by HFA.
+        \n\nFinally, review any team Matchups. If you do not agree with the calculations made so far set that Matchup to custom and adjust as you see fit.
     </string>
+    <string name="power_rankings_text">
+        Rankings of all 32 teams. Matchup Calculations based off Power Rankings use an algorithm found by examining wins and losses of several different teams per year from top to bottom for the past 10 years.
+        \n\nThe default Power Rankings are based off several published Power Rankings from mid-summer 2017.
+    </string>
+    <string name="elo_ratings_text">
+        A score to be assigned to each team as a measure of how good that team is. Full details on Elo Ratings can be found on Wikipedia or FiveThirtyEight, including the how to calculate win chances for two teams based on their Elo Ratings.
+        \n\nA brief summary: the average team has a score of 1,500. After every game the winner gains points and the loser loses points based on the final score and whether or not it was an upset.
+        \n\nSee the "Sample Elo Ratings" section for some ideas on where to start for your own Elo Ratings.
+        \n\nThe default Elo Ratings are about what FiveThirtyEight will have to start the 2017 season. It is based primarily on how each team finished last year. The main difference is that, to account offseason changes and moves, FiveThirtyEight shrinks each team\'s score back towards 1,500. This results in less extreme win chances (better teams having lower chances to beat worse teams) as at the beginning of the season it is less likely we truly know who the good teams are.
+    </string>
+    <string name="home_field_advantage_text">
+        Represents the team\'s home field advantage. Half this number is added to their win chance when you choose to use HFA calculations.
+        \n\nThe default HFA\'s are based on the difference between each team\'s Home Win Percent and Away Win Percent over the last 10 years.
+    </string>
+    <string name="sample_elo">Sample Elo Ratings</string>
 
     <string name="display_one_number">%d</string>
     <plurals name="display_number">
