@@ -1,7 +1,6 @@
 package season.nfl.nflseasoncalculatorapp;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -20,9 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nfl.season.input.NFLFileReaderFactory;
+import nfl.season.input.NFLPlayoffSettings;
 import nfl.season.input.NFLTeamSettings;
 import nfl.season.league.League;
+import nfl.season.playoffs.NFLPlayoffs;
+import nfl.season.season.NFLSeason;
 import season.nfl.nflseasoncalculatorapp.fragments.AllTeamsFragment;
+import season.nfl.nflseasoncalculatorapp.fragments.HelpFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.PlayoffsFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.SeasonFragment;
 import season.nfl.nflseasoncalculatorapp.fragments.TeamFragment;
@@ -31,9 +34,21 @@ import season.nfl.nflseasoncalculatorapp.fragments.TeamsFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TeamsFragment.OnFragmentInteractionListener,
         SeasonFragment.OnFragmentInteractionListener, PlayoffsFragment.OnFragmentInteractionListener,
-        AllTeamsFragment.OnFragmentInteractionListener, TeamFragment.OnFragmentInteractionListener{
+        AllTeamsFragment.OnFragmentInteractionListener, TeamFragment.OnFragmentInteractionListener,
+        HelpFragment.OnFragmentInteractionListener {
 
     public static final String LEAGUE_KEY = "LEAGUE_NFL";
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,37 +73,25 @@ public class MainActivity extends AppCompatActivity
         League nfl = new League(League.NFL);
         nfl.initializeNFL();
 
-        Context context = getApplicationContext();
-        File fileDir = context.getFilesDir();
-        String folderPath = fileDir.getAbsolutePath();
+        NFLPlayoffs playoffs = new NFLPlayoffs(nfl);
+        playoffs.initializeNFLPlayoffs();
 
-        NFLFileReaderFactory fileReaderFactory = new NFLFileReaderFactory();
-        NFLTeamSettings teamSettings = new NFLTeamSettings();
-        try {
-            String teamSettingsString = teamSettings.loadSettingsFile(folderPath, fileReaderFactory);
-            if (teamSettingsString != null && !"".equals(teamSettingsString)) {
-                teamSettings.setTeamsSettingsFromTeamSettingsFileString(nfl,
-                        teamSettingsString);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        NFLSeason season = new NFLSeason();
+        season.initializeNFLRegularSeason(nfl);
+
+        loadSettingsFiles(nfl, playoffs);
 
         Bundle fragmentArgs = new Bundle();
         fragmentArgs.putSerializable(LEAGUE_KEY, nfl);
 
-        setUpAdapter(adapter, nfl);
+        setUpAdapter(adapter, nfl, playoffs, season);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(4);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -120,13 +123,40 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void setUpAdapter(ViewPagerAdapter adapter, League nfl) {
+    private void loadSettingsFiles(League nfl, NFLPlayoffs playoffs) {
+        Context context = getApplicationContext();
+        File fileDir = context.getFilesDir();
+        String folderPath = fileDir.getAbsolutePath();
+
+        NFLFileReaderFactory fileReaderFactory = new NFLFileReaderFactory();
+        NFLTeamSettings teamSettings = new NFLTeamSettings();
+        NFLPlayoffSettings playoffSettings = new NFLPlayoffSettings();
+        try {
+            String teamSettingsString = teamSettings.loadSettingsFile(folderPath, fileReaderFactory);
+            if (teamSettingsString != null && !"".equals(teamSettingsString)) {
+                teamSettings.setTeamsSettingsFromTeamSettingsFileString(nfl,
+                        teamSettingsString);
+            }
+
+            String playoffSettingsString = playoffSettings.loadSettingsFile(folderPath, fileReaderFactory);
+            if (playoffSettingsString != null && !"".equals(playoffSettingsString)) {
+                playoffSettings.loadPlayoffSettingsString(playoffs, nfl, playoffSettingsString);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setUpAdapter(
+            ViewPagerAdapter adapter, League nfl, NFLPlayoffs playoffs, NFLSeason season) {
         TeamsFragment teamsFragment = TeamsFragment.newInstance(nfl, null);
-        SeasonFragment seasonFragment = new SeasonFragment();
-        PlayoffsFragment playoffsFragment = new PlayoffsFragment();
+        SeasonFragment seasonFragment = SeasonFragment.newInstance(nfl, season);
+        PlayoffsFragment playoffsFragment = PlayoffsFragment.newInstance(nfl, playoffs);
+        HelpFragment helpFragment = HelpFragment.newInstance();
 
         adapter.addFragment(teamsFragment, "Teams");
         adapter.addFragment(seasonFragment, "Season");
         adapter.addFragment(playoffsFragment, "Playoffs");
+        adapter.addFragment(helpFragment, "Help");
     }
 }

@@ -91,6 +91,7 @@ public class AllTeamsFragment extends Fragment {
         setUpAllToPowerRankingsButton(activity);
         setUpAllToEloRatingsButton(activity);
         setUpAllToHomeFieldButton(activity);
+        setUpDefaultAllButton(activity);
     }
 
     @Override
@@ -139,9 +140,7 @@ public class AllTeamsFragment extends Fragment {
                     Fragment newTeamFragment = TeamFragment.newInstance(nfl, teamName);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.addToBackStack(null);
-                    transaction.hide(AllTeamsFragment.this);
-                    transaction.add(R.id.teams_fragment_holder, newTeamFragment);
-
+                    transaction.replace(R.id.teams_fragment_holder, newTeamFragment);
                     transaction.commit();
                 }
             });
@@ -203,6 +202,19 @@ public class AllTeamsFragment extends Fragment {
                         matchup.calculateHomeWinChanceFromHomeFieldAdvantage(teamName);
                     }
                 }
+            }
+        });
+    }
+
+    private void setUpDefaultAllButton(final Activity activity) {
+        final Button defaultAllTeamsButton = (Button) activity.findViewById(R.id.defaultAllTeamsButton);
+        defaultAllTeamsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                List<Team> teams = nfl.getTeams();
+                for (Team team : teams) {
+                    team.resetToDefaults();
+                }
+                MessageDisplayer.displayMessage(activity, "All Teams' Settings reverted to Defaults");
             }
         });
     }

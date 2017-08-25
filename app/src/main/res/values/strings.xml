@@ -5,8 +5,10 @@
 
     <string name="set_all_team_settings">Set All Teams\' Matchups Using:</string>
     <string name="select_team">Select Team</string>
+    <string name="select_team_short">Team</string>
 
     <string name="save_teams_to_file">Save Current Team Settings to Memory</string>
+    <string name="default_all_teams">Set All Teams Settings to Defaults</string>
 
     <!-- Selected Team Strings -->
     <string name="power_ranking">Power Ranking</string>
@@ -42,9 +44,80 @@
         <item>@string/home_field_advantage_mode</item>
     </string-array>
 
+    <string name="default_team">Set Team Settings to Default</string>
     <string name="back">Back</string>
-    <string name="save_and_back">Save and Back</string>
+    <string name="cancel">Cancel and Back</string>
+    <string name="save_temp_settings">Save Settings and Back</string>
 
+    <!-- Playoff Strings -->
+    <string name="save_playoff_settings">Save Playoff Settings to Memory</string>
+
+    <string name="division_wildcard">Div /\nWildcard</string>
+    <string name="seed">Seed</string>
+    <string name="division_champion">%s Champ</string>
+    <string name="wildcard_label">%s Wildcard</string>
+    <string name="generate_playoff_table">Generate Playoff Table</string>
+
+    <string name="divisional_label">Div\nRnd</string>
+    <string name="conference_label">Conf\nRnd</string>
+    <string name="conference_champ_label">Conf\nChamps</string>
+    <string name="super_bowl_label">SB\nChamps</string>
+
+    <!-- Season Strings -->
+    <string name="view">View</string>
+    <string name="load_regular_season">Load Regular Season From Internet</string>
+    <string name="view_week">View Week</string>
+    <string name="simulate_seasons">Display Season Probabilities</string>
+
+    <string name="average_wins">Avg\nWins</string>
+    <string name="average_losses">Avg\nLosses</string>
+    <string name="bottom_5_label">Bot\n5</string>
+    <string name="division_cellar_label">Div\nLast</string>
+    <string name="winning_season_label">Win\nSeas</string>
+    <string name="playoff_label">Play-\noffs</string>
+    <string name="division_champion_label">Div\nChamp</string>
+    <string name="round_one_bye_label">Rnd 1\nBye</string>
+    <string name="one_seed_label">#1\nSeed</string>
+
+    <!-- Help Strings -->
+    <string name="getting_started">Getting Started</string>
+    <string name="getting_started_text">
+        The calculations on the Season and Playoffs tabs are based on the settings you save in the Teams tab.
+        \n\nStart by setting either the Power Rankings or Elo Ratings of all teams and calculate all Matchups by the one of the two you choose.
+        \n\nAlso set the Home Field Advantage (HFA) of every team as you see fit and calculate all Home/Away Matchups by HFA.
+        \n\nFinally, review any team Matchups. If you do not agree with the calculations made so far set that Matchup to custom and adjust as you see fit.
+    </string>
+    <string name="power_rankings_text">
+        Rankings of all 32 teams. Matchup Calculations based off Power Rankings use an algorithm found by examining wins and losses of several different teams per year from top to bottom for the past 10 years.
+        \n\nThe default Power Rankings are based off several published Power Rankings from mid-summer 2017.
+    </string>
+    <string name="elo_ratings_text">
+        A score to be assigned to each team as a measure of how good that team is. Full details on Elo Ratings can be found on Wikipedia or FiveThirtyEight, including how to calculate win chances for two teams based on their Elo Ratings.
+        \n\nA brief summary: the average team has a score of 1,500. After every game the winner gains points and the loser loses points based on the final score and whether or not it was an upset.
+        \n\nSee the "Sample Elo Ratings" section for some ideas on where to start for your own Elo Ratings.
+        \n\nThe default Elo Ratings are about what FiveThirtyEight will have to start the 2017 season. It is based primarily on how each team finished last year. The main difference is that, to account offseason changes and moves, FiveThirtyEight shrinks each team\'s score back towards 1,500. This results in less extreme win chances (better teams having lower chances to beat worse teams) as at the beginning of the season it is less likely we truly know who the good teams are.
+    </string>
+    <string name="home_field_advantage_text">
+        Represents the team\'s home field advantage. Half this number is added to their win chance when you choose to use HFA calculations.
+        \n\nThe default HFA\'s are based on the difference between each team\'s Home Win Percent and Away Win Percent over the last 10 years.
+    </string>
+    <string name="sample_elo">Sample Elo Ratings</string>
+    <string name="elo_at_end">Elo at End\n of Season</string>
+    <string name="elo_at_start">Elo at Start\n of Next Season</string>
+
+    <string name="best_team">Best Team</string>
+    <string name="super_bowl_champ">SB Champs</string>
+    <string name="runner_up">Runner Up</string>
+    <string name="conf_championship">Lost in Conf Champ</string>
+    <string name="divisional_round">Lost in Div Round</string>
+    <string name="wildcard_round">Lost in Wildcard Round</string>
+    <string name="division_champs">Division Champs</string>
+    <string name="wildcard_teams">Wildcard Teams</string>
+    <string name="mediocre_teams">8-8 Teams</string>
+    <string name="divisional_cellar">Div Cellar Teams</string>
+    <string name="worst_team">Worst Team</string>
+
+    <string name="display_one_number">%d</string>
     <plurals name="display_number">
         <item quantity="other">%d</item>
     </plurals>
