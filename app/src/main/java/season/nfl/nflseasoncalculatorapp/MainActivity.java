@@ -1,7 +1,6 @@
 package season.nfl.nflseasoncalculatorapp;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -80,27 +79,7 @@ public class MainActivity extends AppCompatActivity
         NFLSeason season = new NFLSeason();
         season.initializeNFLRegularSeason(nfl);
 
-        Context context = getApplicationContext();
-        File fileDir = context.getFilesDir();
-        String folderPath = fileDir.getAbsolutePath();
-
-        NFLFileReaderFactory fileReaderFactory = new NFLFileReaderFactory();
-        NFLTeamSettings teamSettings = new NFLTeamSettings();
-        NFLPlayoffSettings playoffSettings = new NFLPlayoffSettings();
-        try {
-            String teamSettingsString = teamSettings.loadSettingsFile(folderPath, fileReaderFactory);
-            if (teamSettingsString != null && !"".equals(teamSettingsString)) {
-                teamSettings.setTeamsSettingsFromTeamSettingsFileString(nfl,
-                        teamSettingsString);
-            }
-
-            String playoffSettingsString = playoffSettings.loadSettingsFile(folderPath, fileReaderFactory);
-            if (playoffSettingsString != null && !"".equals(playoffSettingsString)) {
-                playoffSettings.loadPlayoffSettingsString(playoffs, nfl, playoffSettingsString);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadSettingsFiles(nfl, playoffs);
 
         Bundle fragmentArgs = new Bundle();
         fragmentArgs.putSerializable(LEAGUE_KEY, nfl);
@@ -113,11 +92,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -146,6 +120,30 @@ public class MainActivity extends AppCompatActivity
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+    }
+
+    private void loadSettingsFiles(League nfl, NFLPlayoffs playoffs) {
+        Context context = getApplicationContext();
+        File fileDir = context.getFilesDir();
+        String folderPath = fileDir.getAbsolutePath();
+
+        NFLFileReaderFactory fileReaderFactory = new NFLFileReaderFactory();
+        NFLTeamSettings teamSettings = new NFLTeamSettings();
+        NFLPlayoffSettings playoffSettings = new NFLPlayoffSettings();
+        try {
+            String teamSettingsString = teamSettings.loadSettingsFile(folderPath, fileReaderFactory);
+            if (teamSettingsString != null && !"".equals(teamSettingsString)) {
+                teamSettings.setTeamsSettingsFromTeamSettingsFileString(nfl,
+                        teamSettingsString);
+            }
+
+            String playoffSettingsString = playoffSettings.loadSettingsFile(folderPath, fileReaderFactory);
+            if (playoffSettingsString != null && !"".equals(playoffSettingsString)) {
+                playoffSettings.loadPlayoffSettingsString(playoffs, nfl, playoffSettingsString);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

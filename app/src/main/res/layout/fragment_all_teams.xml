@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="season.nfl.nflseasoncalculatorapp.fragments.AllTeamsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -79,7 +78,7 @@
                     android:id="@+id/teams_list"
                     android:layout_width="match_parent"
                     android:layout_height="1620dp"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical" />
             </LinearLayout>
         </ScrollView>
 

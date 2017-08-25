@@ -1,7 +1,6 @@
 package season.nfl.nflseasoncalculatorapp.fragments;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nfl.season.league.League;
-import nfl.season.league.Matchup;
 import nfl.season.league.NFLTeamEnum;
 import nfl.season.league.Team;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
@@ -95,7 +93,6 @@ public class TeamFragment extends Fragment {
 
         setUpInputFields(activity);
         setUpButtons(activity);
-        //setUpMatchupTable(activity);
         ProgressBar matchupProgress = (ProgressBar) activity.findViewById(R.id.matchupProgress);
         MatchupTableTask matchupTableTask = new MatchupTableTask(activity, matchupProgress);
         matchupTableTask.execute(team);
@@ -136,50 +133,6 @@ public class TeamFragment extends Fragment {
         setUpPowerRankingsAllButton(activity);
         setUpEloRatingsAllButton(activity);
         setUpHomeFieldAllButton(activity);
-    }
-
-    private void setUpMatchupTable(Activity activity) {
-        List<Matchup> matchups = team.getMatchups();
-        TableLayout matchupTable = (TableLayout) activity.findViewById(R.id.matchupTable);
-
-        for (int i = 0; i < matchups.size(); i++) {
-            Matchup matchup = matchups.get(i);
-            TableRow matchupRow = new TableRow(activity);
-
-            String opponentName = matchup.getOpponentName(selectedTeam);
-            TextView opponentLabel = new TextView(activity);
-            opponentLabel.setText(opponentName);
-            matchupRow.addView(opponentLabel);
-
-            WinChanceEditText neutralEdit = new WinChanceEditText(activity, matchup, selectedTeam,
-                    WinChanceEditText.WinChanceTypeEnum.NEUTRAL);
-            matchupRow.addView(neutralEdit);
-
-            NeutralWinModeSpinner neutralModeEdit = new NeutralWinModeSpinner(activity, matchup, selectedTeam,
-                    neutralEdit);
-            matchupRow.addView(neutralModeEdit);
-
-            WinChanceEditText homeEdit = new WinChanceEditText(activity, matchup, selectedTeam,
-                    WinChanceEditText.WinChanceTypeEnum.HOME);
-            matchupRow.addView(homeEdit);
-
-            HomeAwayWinModeSpinner homeModeEdit = new HomeAwayWinModeSpinner(activity, matchup, selectedTeam,
-                    selectedTeam, homeEdit);
-            matchupRow.addView(homeModeEdit);
-
-            WinChanceEditText awayEdit = new WinChanceEditText(activity, matchup, selectedTeam,
-                    WinChanceEditText.WinChanceTypeEnum.AWAY);
-            matchupRow.addView(awayEdit);
-
-            HomeAwayWinModeSpinner awayModeEdit = new HomeAwayWinModeSpinner(activity, matchup, selectedTeam,
-                    opponentName, awayEdit);
-            matchupRow.addView(awayModeEdit);
-
-            neutralModeEdit.setHomeSpinner(homeModeEdit);
-            neutralModeEdit.setAwaySpinner(awayModeEdit);
-
-            matchupTable.addView(matchupRow);
-        }
     }
 
     private void setUpBackButton(final Activity activity) {

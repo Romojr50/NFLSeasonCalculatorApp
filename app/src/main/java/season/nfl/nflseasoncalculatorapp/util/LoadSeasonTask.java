@@ -1,13 +1,11 @@
 package season.nfl.nflseasoncalculatorapp.util;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import java.io.IOException;
-import java.net.URL;
 
 import nfl.season.input.NFLFileReaderFactory;
 import nfl.season.input.NFLFileWriterFactory;
@@ -24,7 +22,7 @@ public class LoadSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         void processFinish(String output);
     }
 
-    public LoadAsyncResponse delegate = null;
+    private LoadAsyncResponse delegate = null;
 
     private Activity activity;
 
@@ -47,27 +45,7 @@ public class LoadSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         }
 
         if (season != null) {
-            League nfl = season.getLeague();
-            ScoreStripReader scoreStripReader = new ScoreStripReader();
-            ScoreStripMapper scoreStripMapper = new ScoreStripMapper(nfl);
-            NFLRegularSeasonSave seasonSave = new NFLRegularSeasonSave();
-            NFLFileWriterFactory fileWriterFactory = new NFLFileWriterFactory();
-            try {
-                season.loadSeason(scoreStripReader, scoreStripMapper, seasonSave, fileWriterFactory, folderPath);
-                success = true;
-                result = "Season Loaded from Internet";
-            } catch (Exception e) {
-                e.printStackTrace();
-                NFLFileReaderFactory fileReaderFactory = new NFLFileReaderFactory();
-                try {
-                    String seasonString = seasonSave.loadSeasonSave(fileReaderFactory, folderPath);
-                    seasonSave.populateSeasonFromSeasonString(seasonString, season);
-                    success = true;
-                    result = "Connection failed; Season Loaded from saved file";
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-            }
+            result = loadSeasonString(result, season);
         }
 
         return result;
@@ -80,6 +58,31 @@ public class LoadSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
             seasonOperationLayout.setVisibility(View.VISIBLE);
         }
         delegate.processFinish(result);
+    }
+
+    private String loadSeasonString(String result, NFLSeason season) {
+        League nfl = season.getLeague();
+        ScoreStripReader scoreStripReader = new ScoreStripReader();
+        ScoreStripMapper scoreStripMapper = new ScoreStripMapper(nfl);
+        NFLRegularSeasonSave seasonSave = new NFLRegularSeasonSave();
+        NFLFileWriterFactory fileWriterFactory = new NFLFileWriterFactory();
+        try {
+            season.loadSeason(scoreStripReader, scoreStripMapper, seasonSave, fileWriterFactory, folderPath);
+            success = true;
+            result = "Season Loaded from Internet";
+        } catch (Exception e) {
+            e.printStackTrace();
+            NFLFileReaderFactory fileReaderFactory = new NFLFileReaderFactory();
+            try {
+                String seasonString = seasonSave.loadSeasonSave(fileReaderFactory, folderPath);
+                seasonSave.populateSeasonFromSeasonString(seasonString, season);
+                success = true;
+                result = "Connection failed; Season Loaded from saved file";
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+        return result;
     }
 
 }

@@ -3,13 +3,9 @@ package season.nfl.nflseasoncalculatorapp.util;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
-import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -19,7 +15,6 @@ import java.util.List;
 import nfl.season.league.Conference;
 import nfl.season.league.Division;
 import nfl.season.league.League;
-import nfl.season.league.NFLTeamEnum;
 import nfl.season.league.Team;
 import nfl.season.playoffs.NFLPlayoffs;
 import nfl.season.season.NFLManySeasonSimulator;
@@ -30,9 +25,9 @@ import season.nfl.nflseasoncalculatorapp.R;
 
 public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
-    public static final double NUMBER_OF_HUNDRED_SIMULATIONS = 20.0;
+    private static final double NUMBER_OF_HUNDRED_SIMULATIONS = 20.0;
 
-    public static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
+    private static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
 
     private final int padding_in_px;
 
@@ -97,46 +92,58 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         List<Conference> conferences = nfl.getConferences();
         for (int i = 0; i < conferences.size(); i++) {
             Conference conference = conferences.get(i);
-            List<Division> divisions = conference.getDivisions();
-            for (int j = 0; j < divisions.size(); j++) {
-                Division division = divisions.get(j);
-                List<Team> teams = division.getTeams();
-                for (int k = 0; k < teams.size(); k++) {
-                    Team team = teams.get(k);
-                    String teamName = team.getName();
-                    NFLSeasonTeam seasonTeam = season.getTeam(teamName);
+            fillOutTableForConference(conference);
+        }
+    }
 
-                    TableRow teamRow = new TableRow(activity);
+    private void fillOutTableForConference(Conference conference) {
+        List<Division> divisions = conference.getDivisions();
+        for (int j = 0; j < divisions.size(); j++) {
+            Division division = divisions.get(j);
+            fillOutTableForDivision(divisions, j, division);
+        }
+    }
 
-                    TextView teamLabel = new TextView(activity);
-                    teamLabel.setText(teamName);
-                    teamRow.addView(teamLabel);
+    private void fillOutTableForDivision(List<Division> divisions, int j, Division division) {
+        List<Team> teams = division.getTeams();
+        for (int k = 0; k < teams.size(); k++) {
+            Team team = teams.get(k);
+            String teamName = team.getName();
+            NFLSeasonTeam seasonTeam = season.getTeam(teamName);
 
-                    addCellToRowWithPercent(teamRow, activity, seasonTeam.getSimulatedWins());
-                    addCellToRowWithPercent(teamRow, activity, seasonTeam.getSimulatedLosses());
-                    addCellToRowWithValue(teamRow, activity, seasonTeam.getWasBottomTeam());
-                    addCellToRowWithValue(teamRow, activity, seasonTeam.getWasInDivisionCellar());
-                    addCellToRowWithValue(teamRow, activity, seasonTeam.getHadWinningSeason());
-                    addCellToRowWithValue(teamRow, activity, seasonTeam.getMadePlayoffs());
-                    addCellToRowWithValue(teamRow, activity, seasonTeam.getWonDivision());
-                    addCellToRowWithValue(teamRow, activity, seasonTeam.getGotRoundOneBye());
-                    addCellToRowWithValue(teamRow, activity, seasonTeam.getGotOneSeed());
-                    addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToMakeDivisionalRound());
-                    addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToMakeConferenceRound());
-                    addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToWinConference());
-                    addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToWinSuperBowl());
+            TableRow teamRow = new TableRow(activity);
 
-                    if (k >= (teams.size() - 1)) {
-                        if (j >= (divisions.size() - 1)) {
-                            teamRow.setPadding(0, 0, 0, 40);
-                        } else {
-                            teamRow.setPadding(0, 0, 0, 20);
-                        }
-                    }
-                    simulateSeasonsTable.addView(teamRow);
+            TextView teamLabel = new TextView(activity);
+            teamLabel.setText(teamName);
+            teamRow.addView(teamLabel);
+
+            addCellsToRow(seasonTeam, teamRow);
+
+            if (k >= (teams.size() - 1)) {
+                if (j >= (divisions.size() - 1)) {
+                    teamRow.setPadding(0, 0, 0, 40);
+                } else {
+                    teamRow.setPadding(0, 0, 0, 20);
                 }
             }
+            simulateSeasonsTable.addView(teamRow);
         }
+    }
+
+    private void addCellsToRow(NFLSeasonTeam seasonTeam, TableRow teamRow) {
+        addCellToRowWithPercent(teamRow, activity, seasonTeam.getSimulatedWins());
+        addCellToRowWithPercent(teamRow, activity, seasonTeam.getSimulatedLosses());
+        addCellToRowWithValue(teamRow, activity, seasonTeam.getWasBottomTeam());
+        addCellToRowWithValue(teamRow, activity, seasonTeam.getWasInDivisionCellar());
+        addCellToRowWithValue(teamRow, activity, seasonTeam.getHadWinningSeason());
+        addCellToRowWithValue(teamRow, activity, seasonTeam.getMadePlayoffs());
+        addCellToRowWithValue(teamRow, activity, seasonTeam.getWonDivision());
+        addCellToRowWithValue(teamRow, activity, seasonTeam.getGotRoundOneBye());
+        addCellToRowWithValue(teamRow, activity, seasonTeam.getGotOneSeed());
+        addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToMakeDivisionalRound());
+        addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToMakeConferenceRound());
+        addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToWinConference());
+        addCellToRowWithPercent(teamRow, activity, seasonTeam.getChanceToWinSuperBowl());
     }
 
     private void addCellToRowWithValue(TableRow teamRow, Activity activity, int value) {
@@ -156,7 +163,6 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
     }
 
     private String getPercentText(int numberOfOccurrences) {
-        //TODO: Rounding errors keep resulting is lower percents?
         int percent = (int) Math.round(numberOfOccurrences / NUMBER_OF_HUNDRED_SIMULATIONS);
         return getTextFromPercent(percent);
     }

@@ -3,17 +3,14 @@ package season.nfl.nflseasoncalculatorapp.fragments;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -21,15 +18,8 @@ import android.widget.TextView;
 
 import java.io.File;
 
-import nfl.season.input.NFLFileWriterFactory;
-import nfl.season.input.NFLRegularSeasonSave;
 import nfl.season.league.League;
-import nfl.season.playoffs.NFLPlayoffs;
-import nfl.season.scorestrip.ScoreStripMapper;
-import nfl.season.scorestrip.ScoreStripReader;
-import nfl.season.season.NFLManySeasonSimulator;
 import nfl.season.season.NFLSeason;
-import nfl.season.season.NFLTiebreaker;
 import nfl.season.season.SeasonWeek;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
@@ -49,13 +39,9 @@ public class SeasonFragment extends Fragment {
 
     private static final String SEASON_KEY = "NFL_Season";
 
-    private League nfl;
-
     private NFLSeason season;
 
     private String folderPath;
-
-    private OnFragmentInteractionListener mListener;
 
     public SeasonFragment() {
         // Required empty public constructor
@@ -81,7 +67,6 @@ public class SeasonFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            nfl = (League) getArguments().getSerializable(MainActivity.LEAGUE_KEY);
             season = (NFLSeason) getArguments().getSerializable(SEASON_KEY);
         }
     }
@@ -102,18 +87,10 @@ public class SeasonFragment extends Fragment {
         setSimulateSeasonsButton(activity);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
             File fileDir = context.getFilesDir();
             folderPath = fileDir.getAbsolutePath();
         } else {
@@ -125,7 +102,6 @@ public class SeasonFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -139,8 +115,6 @@ public class SeasonFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     private void setLoadSeasonButtonListener(final Activity activity) {

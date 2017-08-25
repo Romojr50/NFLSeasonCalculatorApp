@@ -17,10 +17,6 @@ import season.nfl.nflseasoncalculatorapp.input.HomeAwayWinModeSpinner;
 import season.nfl.nflseasoncalculatorapp.input.NeutralWinModeSpinner;
 import season.nfl.nflseasoncalculatorapp.input.WinChanceEditText;
 
-/**
- * Created by Owner on 8/21/2017.
- */
-
 public class MatchupTableTask extends AsyncTask<Team, TableRow, String> {
 
     private Activity activity;

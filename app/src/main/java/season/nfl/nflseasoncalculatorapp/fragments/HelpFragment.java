@@ -1,7 +1,6 @@
 package season.nfl.nflseasoncalculatorapp.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,8 +20,6 @@ import season.nfl.nflseasoncalculatorapp.R;
  */
 public class HelpFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-
     public HelpFragment() {
         // Required empty public constructor
     }
@@ -33,7 +30,6 @@ public class HelpFragment extends Fragment {
      *
      * @return A new instance of fragment HelpFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HelpFragment newInstance() {
         HelpFragment fragment = new HelpFragment();
         Bundle args = new Bundle();
@@ -58,28 +54,14 @@ public class HelpFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -93,7 +75,5 @@ public class HelpFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }
