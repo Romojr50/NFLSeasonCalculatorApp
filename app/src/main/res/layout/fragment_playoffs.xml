@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="season.nfl.nflseasoncalculatorapp.fragments.PlayoffsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:id="@+id/playoffScroll"
         android:layout_width="match_parent"
@@ -26,7 +25,7 @@
                 android:id="@+id/selectPlayoffTeamsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical" />
 
             <Button
                 android:id="@+id/generatePlayoffTableButton"

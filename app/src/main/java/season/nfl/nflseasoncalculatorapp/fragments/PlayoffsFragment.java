@@ -354,28 +354,19 @@ public class PlayoffsFragment extends Fragment {
             teamNameView.setText(teamName);
             teamRow.addView(teamNameView);
 
-            int chanceToMakeDivisional = playoffTeam.getChanceOfMakingDivisionalRound();
-            TextView divisionalView = createTextViewWithNumber(activity, chanceToMakeDivisional);
-            divisionalView.setPadding(PLAYOFF_TABLE_PADDING, 0, 0, 0);
-            teamRow.addView(divisionalView);
-
-            int chanceToMakeConference = playoffTeam.getChanceOfMakingConferenceRound();
-            TextView conferenceView = createTextViewWithNumber(activity, chanceToMakeConference);
-            conferenceView.setPadding(PLAYOFF_TABLE_PADDING, 0, 0, 0);
-            teamRow.addView(conferenceView);
-
-            int chanceToWinConference = playoffTeam.getChanceOfMakingSuperBowl();
-            TextView conferenceChampView = createTextViewWithNumber(activity, chanceToWinConference);
-            conferenceChampView.setPadding(PLAYOFF_TABLE_PADDING, 0, 0, 0);
-            teamRow.addView(conferenceChampView);
-
-            int chanceToWinSuperBowl = playoffTeam.getChanceOfWinningSuperBowl();
-            TextView superBowlView = createTextViewWithNumber(activity, chanceToWinSuperBowl);
-            superBowlView.setPadding(PLAYOFF_TABLE_PADDING, 0, 0, 0);
-            teamRow.addView(superBowlView);
+            addTextViewToRowWithNumber(activity, teamRow, playoffTeam.getChanceOfMakingDivisionalRound());
+            addTextViewToRowWithNumber(activity, teamRow, playoffTeam.getChanceOfMakingConferenceRound());
+            addTextViewToRowWithNumber(activity, teamRow, playoffTeam.getChanceOfMakingSuperBowl());
+            addTextViewToRowWithNumber(activity, teamRow, playoffTeam.getChanceOfWinningSuperBowl());
 
             playoffTable.addView(teamRow);
         }
+    }
+
+    private void addTextViewToRowWithNumber(Activity activity, TableRow teamRow, int number) {
+        TextView viewWithNumber = createTextViewWithNumber(activity, number);
+        viewWithNumber.setPadding(PLAYOFF_TABLE_PADDING, 0, 0, 0);
+        teamRow.addView(viewWithNumber);
     }
 
     private TextView createTextViewWithNumber(Activity activity, int number) {

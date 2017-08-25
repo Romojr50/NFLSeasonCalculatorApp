@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nfl.season.league.League;
-import nfl.season.league.Matchup;
 import nfl.season.league.NFLTeamEnum;
 import nfl.season.league.Team;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
@@ -28,6 +28,7 @@ import season.nfl.nflseasoncalculatorapp.input.HomeAwayWinModeSpinner;
 import season.nfl.nflseasoncalculatorapp.input.NeutralWinModeSpinner;
 import season.nfl.nflseasoncalculatorapp.input.WinChanceEditText;
 import season.nfl.nflseasoncalculatorapp.util.InputSetter;
+import season.nfl.nflseasoncalculatorapp.util.MatchupTableTask;
 import season.nfl.nflseasoncalculatorapp.util.MessageDisplayer;
 
 /**
@@ -83,16 +84,18 @@ public class TeamFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
-        team = nfl.getTeam(selectedTeam);
-
         Activity activity = getActivity();
+
+        team = nfl.getTeam(selectedTeam);
 
         TextView textView = (TextView) activity.findViewById(R.id.team_name);
         textView.setText(selectedTeam);
 
         setUpInputFields(activity);
         setUpButtons(activity);
-        setUpMatchupTable(activity);
+        ProgressBar matchupProgress = (ProgressBar) activity.findViewById(R.id.matchupProgress);
+        MatchupTableTask matchupTableTask = new MatchupTableTask(activity, matchupProgress);
+        matchupTableTask.execute(team);
     }
 
     @Override
@@ -123,6 +126,7 @@ public class TeamFragment extends Fragment {
     }
 
     private void setUpButtons(final Activity activity) {
+        setUpDefaultButton(activity);
         setUpBackButton(activity);
         setUpSaveButton(activity);
         setUpSaveTeamSettingsButton(activity);
@@ -134,7 +138,7 @@ public class TeamFragment extends Fragment {
     private void setUpBackButton(final Activity activity) {
         final Resources resources = activity.getResources();
 
-        final Button backButton = (Button) activity.findViewById(R.id.backButton);
+        final Button backButton = (Button) activity.findViewById(R.id.cancelButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final EditText powerRankingsInput = (EditText) activity.findViewById(R.id.powerRankingsInput);
@@ -155,6 +159,17 @@ public class TeamFragment extends Fragment {
                     setMatchupSettingsOntoMatchups(activity);
                     goBackToAllTeamsFragment();
                 }
+            }
+        });
+    }
+
+    private void setUpDefaultButton(final Activity activity) {
+        final Button defaultButton = (Button) activity.findViewById(R.id.defaultButton);
+        defaultButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                nfl.resetTeamToDefault(selectedTeam);
+                setUpInputFields(activity);
+                setMatchupSettingsOntoMatchups(activity);
             }
         });
     }
@@ -280,49 +295,6 @@ public class TeamFragment extends Fragment {
 
         final EditText homeFieldInput = (EditText) activity.findViewById(R.id.homeFieldInput);
         InputSetter.setTextToInputNumber(resources, homeFieldInput, team.getHomeFieldAdvantage());
-    }
-
-    private void setUpMatchupTable(Activity activity) {
-        List<Matchup> matchups = team.getMatchups();
-        TableLayout matchupTable = (TableLayout) activity.findViewById(R.id.matchupTable);
-
-        for (Matchup matchup : matchups) {
-            TableRow matchupRow = new TableRow(activity);
-
-            String opponentName = matchup.getOpponentName(selectedTeam);
-            TextView opponentLabel = new TextView(activity);
-            opponentLabel.setText(opponentName);
-            matchupRow.addView(opponentLabel);
-
-            WinChanceEditText neutralEdit = new WinChanceEditText(activity, matchup, selectedTeam,
-                    WinChanceEditText.WinChanceTypeEnum.NEUTRAL);
-            matchupRow.addView(neutralEdit);
-
-            NeutralWinModeSpinner neutralModeEdit = new NeutralWinModeSpinner(activity, matchup, selectedTeam,
-                    neutralEdit);
-            matchupRow.addView(neutralModeEdit);
-
-            WinChanceEditText homeEdit = new WinChanceEditText(activity, matchup, selectedTeam,
-                    WinChanceEditText.WinChanceTypeEnum.HOME);
-            matchupRow.addView(homeEdit);
-
-            HomeAwayWinModeSpinner homeModeEdit = new HomeAwayWinModeSpinner(activity, matchup, selectedTeam,
-                    selectedTeam, homeEdit);
-            matchupRow.addView(homeModeEdit);
-
-            WinChanceEditText awayEdit = new WinChanceEditText(activity, matchup, selectedTeam,
-                    WinChanceEditText.WinChanceTypeEnum.AWAY);
-            matchupRow.addView(awayEdit);
-
-            HomeAwayWinModeSpinner awayModeEdit = new HomeAwayWinModeSpinner(activity, matchup, selectedTeam,
-                    opponentName, awayEdit);
-            matchupRow.addView(awayModeEdit);
-
-            neutralModeEdit.setHomeSpinner(homeModeEdit);
-            neutralModeEdit.setAwaySpinner(awayModeEdit);
-
-            matchupTable.addView(matchupRow);
-        }
     }
 
     private void setAllNeutralSpinnersToSelection(Activity activity, int stringId) {
