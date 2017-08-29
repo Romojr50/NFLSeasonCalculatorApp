@@ -44,6 +44,7 @@ public class TeamFragment extends Fragment {
     private League nfl;
     private String selectedTeam;
     private Team team;
+    private MatchupTableTask matchupTableTask;
 
     public TeamFragment() {
         // Required empty public constructor
@@ -94,7 +95,7 @@ public class TeamFragment extends Fragment {
         setUpInputFields(activity);
         setUpButtons(activity);
         ProgressBar matchupProgress = (ProgressBar) activity.findViewById(R.id.matchupProgress);
-        MatchupTableTask matchupTableTask = new MatchupTableTask(activity, matchupProgress);
+        matchupTableTask = new MatchupTableTask(activity, matchupProgress);
         matchupTableTask.execute(team);
     }
 
@@ -110,6 +111,14 @@ public class TeamFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (matchupTableTask != null) {
+            matchupTableTask.cancel(true);
+        }
+        super.onDestroyView();
     }
 
     /**
