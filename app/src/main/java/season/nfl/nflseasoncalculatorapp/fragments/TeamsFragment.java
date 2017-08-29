@@ -67,7 +67,6 @@ public class TeamsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Fragment allTeamsFragment = AllTeamsFragment.newInstance(nfl, null);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
         transaction.add(R.id.teams_fragment_holder, allTeamsFragment);
         transaction.commit();
     }

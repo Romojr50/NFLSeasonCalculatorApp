@@ -44,6 +44,7 @@ public class TeamFragment extends Fragment {
     private League nfl;
     private String selectedTeam;
     private Team team;
+    private MatchupTableTask matchupTableTask;
 
     public TeamFragment() {
         // Required empty public constructor
@@ -94,7 +95,7 @@ public class TeamFragment extends Fragment {
         setUpInputFields(activity);
         setUpButtons(activity);
         ProgressBar matchupProgress = (ProgressBar) activity.findViewById(R.id.matchupProgress);
-        MatchupTableTask matchupTableTask = new MatchupTableTask(activity, matchupProgress);
+        matchupTableTask = new MatchupTableTask(activity, matchupProgress);
         matchupTableTask.execute(team);
     }
 
@@ -112,6 +113,14 @@ public class TeamFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onDestroyView() {
+        if (matchupTableTask != null) {
+            matchupTableTask.cancel(true);
+        }
+        super.onDestroyView();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -127,40 +136,11 @@ public class TeamFragment extends Fragment {
 
     private void setUpButtons(final Activity activity) {
         setUpDefaultButton(activity);
-        setUpBackButton(activity);
-        setUpSaveButton(activity);
         setUpSaveTeamSettingsButton(activity);
         setUpPowerRankingsAllButton(activity);
         setUpEloRatingsAllButton(activity);
         setUpHomeFieldAllButton(activity);
-    }
-
-    private void setUpBackButton(final Activity activity) {
-        final Resources resources = activity.getResources();
-
-        final Button backButton = (Button) activity.findViewById(R.id.cancelButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                final EditText powerRankingsInput = (EditText) activity.findViewById(R.id.powerRankingsInput);
-                int powerRanking = team.getPowerRanking();
-                InputSetter.setTextToInputNumber(resources, powerRankingsInput, powerRanking);
-                powerRankingsInput.setOnFocusChangeListener(null);
-                goBackToAllTeamsFragment();
-            }
-        });
-    }
-
-    private void setUpSaveButton(final Activity activity) {
-        final Button saveButton = (Button) activity.findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (validateInput(activity)) {
-                    setTeamSettingsOntoTeam(activity);
-                    setMatchupSettingsOntoMatchups(activity);
-                    goBackToAllTeamsFragment();
-                }
-            }
-        });
+        setUpSaveMatchupsButton(activity);
     }
 
     private void setUpDefaultButton(final Activity activity) {
@@ -188,6 +168,7 @@ public class TeamFragment extends Fragment {
                             winChanceEditText.setTextFromMatchup(resources);
                         }
                     }
+                    MessageDisplayer.displayMessage(activity, "Team Settings Saved to this Session");
                 }
             }
         });
@@ -220,8 +201,14 @@ public class TeamFragment extends Fragment {
         });
     }
 
-    private void goBackToAllTeamsFragment() {
-        getFragmentManager().popBackStackImmediate();
+    private void setUpSaveMatchupsButton(final Activity activity) {
+        final Button saveMatchupsButton = (Button) activity.findViewById(R.id.saveMatchupsButton);
+        saveMatchupsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setMatchupSettingsOntoMatchups(activity);
+                MessageDisplayer.displayMessage(activity, "Matchups Saved to this Session");
+            }
+        });
     }
 
     private boolean validateInput(Activity activity) {
