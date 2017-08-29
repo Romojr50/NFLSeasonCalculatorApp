@@ -48,6 +48,7 @@
     <string name="back">Back</string>
     <string name="cancel">Cancel and Back</string>
     <string name="save_temp_settings">Save Settings and Back</string>
+    <string name="save_matchups">Save Matchups</string>
 
     <!-- Playoff Strings -->
     <string name="save_playoff_settings">Save Playoff Settings to Memory</string>

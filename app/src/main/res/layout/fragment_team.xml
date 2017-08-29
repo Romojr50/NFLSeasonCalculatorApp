@@ -29,24 +29,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <Button
-                android:id="@+id/defaultButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/default_team" />
-
-            <Button
-                android:id="@+id/saveButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/save_temp_settings" />
-
-            <Button
-                android:id="@+id/cancelButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel" />
-
             <TableLayout
                 android:id="@+id/team_settings"
                 android:layout_width="match_parent"
@@ -120,6 +102,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/save_team_settings" />
 
+            <Button
+                android:id="@+id/defaultButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/default_team" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
@@ -149,6 +137,7 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="@string/set_all_label" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -178,6 +167,13 @@
                         android:text="@string/home_field_advantage_all" />
                 </LinearLayout>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/saveMatchupsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save_matchups" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
