@@ -39,15 +39,23 @@ public class MainActivity extends AppCompatActivity
 
     public static final String LEAGUE_KEY = "LEAGUE_NFL";
 
+    private static final int INDEX_OF_TEAM_TAB = 0;
+
+    private ViewPager viewPager;
+
     @Override
     public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
-
-        if (count == 0) {
-            super.onBackPressed();
-        } else {
-            getFragmentManager().popBackStack();
+        if (viewPager != null) {
+            int currentTab = viewPager.getCurrentItem();
+            if (currentTab == INDEX_OF_TEAM_TAB) {
+                super.onBackPressed();
+            }
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        onBackPressed();
+        return true;
     }
 
     @Override
@@ -60,7 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
