@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity
 
     public static final String LEAGUE_KEY = "LEAGUE_NFL";
 
+    public static int tablePaddingInPx;
+
     private static final int INDEX_OF_TEAM_TAB = 0;
 
     private ViewPager viewPager;
@@ -62,6 +64,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        int padding_in_dp = 8;  // 6 dps
+        final float scale = getResources().getDisplayMetrics().density;
+        tablePaddingInPx = (int) (padding_in_dp * scale + 0.5f);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
