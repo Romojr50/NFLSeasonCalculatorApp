@@ -39,15 +39,25 @@ public class MainActivity extends AppCompatActivity
 
     public static final String LEAGUE_KEY = "LEAGUE_NFL";
 
+    public static int tablePaddingInPx;
+
+    private static final int INDEX_OF_TEAM_TAB = 0;
+
+    private ViewPager viewPager;
+
     @Override
     public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
-
-        if (count == 0) {
-            super.onBackPressed();
-        } else {
-            getFragmentManager().popBackStack();
+        if (viewPager != null) {
+            int currentTab = viewPager.getCurrentItem();
+            if (currentTab == INDEX_OF_TEAM_TAB) {
+                super.onBackPressed();
+            }
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        onBackPressed();
+        return true;
     }
 
     @Override
@@ -55,12 +65,16 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        int padding_in_dp = 8;  // 6 dps
+        final float scale = getResources().getDisplayMetrics().density;
+        tablePaddingInPx = (int) (padding_in_dp * scale + 0.5f);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

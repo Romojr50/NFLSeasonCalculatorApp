@@ -48,6 +48,7 @@
     <string name="back">Back</string>
     <string name="cancel">Cancel and Back</string>
     <string name="save_temp_settings">Save Settings and Back</string>
+    <string name="save_matchups">Save Matchups</string>
 
     <!-- Playoff Strings -->
     <string name="save_playoff_settings">Save Playoff Settings to Memory</string>
@@ -66,7 +67,14 @@
     <!-- Season Strings -->
     <string name="view">View</string>
     <string name="load_regular_season">Load Regular Season From Internet</string>
+
     <string name="view_week">View Week</string>
+    <string name="week_number">Week %d</string>
+    <string name="away_team">Away</string>
+    <string name="home_team">Home</string>
+    <string name="winner">Winner</string>
+    <string name="tie">Tie</string>
+
     <string name="simulate_seasons">Display Season Probabilities</string>
 
     <string name="average_wins">Avg\nWins</string>

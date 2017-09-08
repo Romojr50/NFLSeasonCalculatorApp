@@ -40,7 +40,7 @@ public class MatchupTableTask extends AsyncTask<Team, TableRow, String> {
 
     @Override
     protected void onProgressUpdate(TableRow... tableRows) {
-        if (tableRows.length > 0) {
+        if (tableRows.length > 0 && !isCancelled()) {
             TableLayout matchupTable = (TableLayout) activity.findViewById(R.id.matchupTable);
             matchupTable.addView(tableRows[0]);
             numberOfRows++;

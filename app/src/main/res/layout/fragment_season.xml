@@ -52,12 +52,57 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/view" />
+
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/viewWeekDisplay"
+                <LinearLayout
+                    android:id="@+id/weekLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/weekNumberLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+
+                    <TableLayout
+                        android:id="@+id/weekTable"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TableRow
+                            android:id="@+id/weekLabelsRow"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/awayLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/away_team" />
+
+                            <TextView
+                                android:id="@+id/homeLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="8dp"
+                                android:text="@string/home_team" />
+
+                            <TextView
+                                android:id="@+id/winnerLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="8dp"
+                                android:text="@string/winner" />
+                        </TableRow>
+
+                    </TableLayout>
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/simulateSeasonsButton"

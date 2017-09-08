@@ -3,6 +3,7 @@ package season.nfl.nflseasoncalculatorapp.fragments;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,15 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.List;
 
 import nfl.season.league.League;
+import nfl.season.league.Team;
 import nfl.season.season.NFLSeason;
+import nfl.season.season.SeasonGame;
 import nfl.season.season.SeasonWeek;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
@@ -81,6 +87,7 @@ public class SeasonFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
         final Activity activity = getActivity();
+
         setLoadSeasonButtonListener(activity);
         setUpPickWeekSpinner(activity);
         setViewWeekButton(activity);
@@ -160,11 +167,23 @@ public class SeasonFragment extends Fragment {
                 Spinner pickWeekSpinner = (Spinner) activity.findViewById(R.id.pickWeekSpinner);
                 Object selectedWeekObject = pickWeekSpinner.getSelectedItem();
                 Integer selectedWeekNumber = (Integer) selectedWeekObject;
-                SeasonWeek selectedWeek = season.getWeek(selectedWeekNumber);
-                String selectedWeekString = season.getWeekString(selectedWeek);
 
-                TextView viewWeekDisplay = (TextView) activity.findViewById(R.id.viewWeekDisplay);
-                viewWeekDisplay.setText(selectedWeekString);
+                SeasonWeek selectedWeek = season.getWeek(selectedWeekNumber);
+
+                LinearLayout weekLayout = (LinearLayout) activity.findViewById(R.id.weekLayout);
+                weekLayout.setVisibility(View.VISIBLE);
+
+                Resources resources = activity.getResources();
+                TextView weekLabel = (TextView) activity.findViewById(R.id.weekNumberLabel);
+                String weekNumberText = resources.getString(R.string.week_number, selectedWeekNumber);
+                weekLabel.setText(weekNumberText);
+
+                TableLayout weekTable = (TableLayout) activity.findViewById(R.id.weekTable);
+                while(weekTable.getChildCount() > 1) {
+                    weekTable.removeViewAt(1);
+                }
+
+                addGameRowsToWeekTable(selectedWeek, weekTable, activity);
             }
         });
     }
@@ -180,5 +199,46 @@ public class SeasonFragment extends Fragment {
                 simulateSeasonTask.execute(season);
             }
         });
+    }
+
+    private void addGameRowsToWeekTable(SeasonWeek selectedWeek, TableLayout weekTable, Activity activity) {
+        Resources resources = activity.getResources();
+
+        List<SeasonGame> games = selectedWeek.getSeasonGames();
+        for (SeasonGame game : games) {
+            TableRow gameRow = new TableRow(activity);
+
+            TextView awayTeamText = new TextView(activity);
+            awayTeamText.setText(game.getAwayTeam().getName());
+            gameRow.addView(awayTeamText);
+
+            TextView homeTeamText = new TextView(activity);
+            homeTeamText.setText(game.getHomeTeam().getName());
+            homeTeamText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+            gameRow.addView(homeTeamText);
+
+            addWinnerToGameRow(activity, game, gameRow);
+
+            weekTable.addView(gameRow);
+        }
+    }
+
+    private void addWinnerToGameRow(Activity activity, SeasonGame game, TableRow gameRow) {
+        Resources resources = activity.getResources();
+
+        Team winner = game.getWinner();
+        if (winner != null) {
+            TextView winnerText = new TextView(activity);
+            winnerText.setText(winner.getName());
+            winnerText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+            gameRow.addView(winnerText);
+        } else {
+            if (game.wasATie()) {
+                TextView tieText = new TextView(activity);
+                tieText.setText(resources.getString(R.string.tie));
+                tieText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+                gameRow.addView(tieText);
+            }
+        }
     }
 }

@@ -21,6 +21,7 @@ import nfl.season.season.NFLManySeasonSimulator;
 import nfl.season.season.NFLSeason;
 import nfl.season.season.NFLSeasonTeam;
 import nfl.season.season.NFLTiebreaker;
+import season.nfl.nflseasoncalculatorapp.MainActivity;
 import season.nfl.nflseasoncalculatorapp.R;
 
 public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
@@ -28,8 +29,6 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
     private static final double NUMBER_OF_HUNDRED_SIMULATIONS = 20.0;
 
     private static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
-
-    private final int padding_in_px;
 
     private ProgressBar progressBar;
 
@@ -43,10 +42,6 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         this.progressBar = progressBar;
         this.activity = activity;
         this.simulateSeasonsTable = simulateSeasonsTable;
-
-        int padding_in_dp = 8;  // 6 dps
-        final float scale = activity.getResources().getDisplayMetrics().density;
-        padding_in_px = (int) (padding_in_dp * scale + 0.5f);
     }
 
     @Override
@@ -150,7 +145,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         TextView percentLabel = new TextView(activity);
         String percentText = getPercentText(value);
         percentLabel.setText(percentText);
-        percentLabel.setPadding(padding_in_px, 0, 0, 0);
+        percentLabel.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
         teamRow.addView(percentLabel);
     }
 
@@ -158,7 +153,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         TextView percentLabel = new TextView(activity);
         String percentText = getPercentTextFromPercent(value);
         percentLabel.setText(percentText);
-        percentLabel.setPadding(padding_in_px, 0, 0, 0);
+        percentLabel.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
         teamRow.addView(percentLabel);
     }
 
