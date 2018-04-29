@@ -86,11 +86,25 @@
                                 android:text="@string/away_team" />
 
                             <TextView
+                                android:id="@+id/awayScoreLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="8dp"
+                                android:text="@string/score" />
+
+                            <TextView
                                 android:id="@+id/homeLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="8dp"
                                 android:text="@string/home_team" />
+
+                            <TextView
+                                android:id="@+id/homeScoreLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="8dp"
+                                android:text="@string/score" />
 
                             <TextView
                                 android:id="@+id/winnerLabel"

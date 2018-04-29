@@ -212,10 +212,13 @@ public class SeasonFragment extends Fragment {
             awayTeamText.setText(game.getAwayTeam().getName());
             gameRow.addView(awayTeamText);
 
-            TextView homeTeamText = new TextView(activity);
-            homeTeamText.setText(game.getHomeTeam().getName());
-            homeTeamText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+            TextView awayScoreText = createTextViewWithPadding(activity, "" + game.getAwayScore());
+            gameRow.addView(awayScoreText);
+
+            TextView homeTeamText = createTextViewWithPadding(activity, game.getHomeTeam().getName());
             gameRow.addView(homeTeamText);
+            TextView homeScoreText = createTextViewWithPadding(activity, "" + game.getHomeScore());
+            gameRow.addView(homeScoreText);
 
             addWinnerToGameRow(activity, game, gameRow);
 
@@ -228,17 +231,20 @@ public class SeasonFragment extends Fragment {
 
         Team winner = game.getWinner();
         if (winner != null) {
-            TextView winnerText = new TextView(activity);
-            winnerText.setText(winner.getName());
-            winnerText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+            TextView winnerText = createTextViewWithPadding(activity, winner.getName());
             gameRow.addView(winnerText);
         } else {
             if (game.wasATie()) {
-                TextView tieText = new TextView(activity);
-                tieText.setText(resources.getString(R.string.tie));
-                tieText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+                TextView tieText = createTextViewWithPadding(activity, "Tie");
                 gameRow.addView(tieText);
             }
         }
+    }
+
+    private TextView createTextViewWithPadding(Activity activity, String text) {
+        TextView textView = new TextView(activity);
+        textView.setText(text);
+        textView.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+        return textView;
     }
 }
