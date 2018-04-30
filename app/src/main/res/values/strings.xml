@@ -106,7 +106,7 @@
         \n\nThe default Elo Ratings are about what FiveThirtyEight will have to start the 2017 season. It is based primarily on how each team finished last year. The main difference is that, to account offseason changes and moves, FiveThirtyEight shrinks each team\'s score back towards 1,500. This results in less extreme win chances (better teams having lower chances to beat worse teams) as at the beginning of the season it is less likely we truly know who the good teams are.
     </string>
     <string name="home_field_advantage_text">
-        Represents the team\'s home field advantage. Half this number is added to their win chance when you choose to use HFA calculations.
+        Represents the team\'s home field advantage (HFA). A team\'s home win chance is 1/4 their HFA + 1/4 their opponent\'s HFA. This represents HFA as being both a team playing better at their home field and playing worse on the road.
         \n\nThe default HFA\'s are based on the difference between each team\'s Home Win Percent and Away Win Percent over the last 10 years.
     </string>
     <string name="sample_elo">Sample Elo Ratings</string>
