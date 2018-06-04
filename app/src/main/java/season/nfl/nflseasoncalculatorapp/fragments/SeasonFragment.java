@@ -201,6 +201,16 @@ public class SeasonFragment extends Fragment {
         });
     }
 
+    private void setExportSeasonsButton(final Activity activity) {
+        Button simulateSeasonsButton = (Button) activity.findViewById(R.id.exportSeasonsButton);
+        simulateSeasonsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
     private void addGameRowsToWeekTable(SeasonWeek selectedWeek, TableLayout weekTable, Activity activity) {
         Resources resources = activity.getResources();
 

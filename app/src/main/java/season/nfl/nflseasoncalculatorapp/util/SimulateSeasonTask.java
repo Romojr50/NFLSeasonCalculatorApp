@@ -81,6 +81,8 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
         HorizontalScrollView simulateScroll = (HorizontalScrollView) activity.findViewById(R.id.simulateScroll);
         simulateScroll.setVisibility(View.VISIBLE);
+        View exportSeasonsButton = activity.findViewById(R.id.exportSeasonsButton);
+        exportSeasonsButton.setVisibility(View.VISIBLE);
 
         while(simulateSeasonsTable.getChildCount() > 0) {
             simulateSeasonsTable.removeViewAt(0);

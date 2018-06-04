@@ -77,6 +77,7 @@
     <string name="tie">Tie</string>
 
     <string name="simulate_seasons">Display Season Probabilities</string>
+    <string name="export_seasons">Export Season Table</string>
 
     <string name="average_wins">Avg\nWins</string>
     <string name="average_losses">Avg\nLosses</string>
