@@ -28,7 +28,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
     private static final double NUMBER_OF_HUNDRED_SIMULATIONS = 20.0;
 
-    private static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
+    public static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
 
     private final float scale;
 
@@ -81,6 +81,8 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
         HorizontalScrollView simulateScroll = (HorizontalScrollView) activity.findViewById(R.id.simulateScroll);
         simulateScroll.setVisibility(View.VISIBLE);
+        View exportSeasonsButton = activity.findViewById(R.id.exportSeasonsButton);
+        exportSeasonsButton.setVisibility(View.VISIBLE);
 
         while(simulateSeasonsTable.getChildCount() > 0) {
             simulateSeasonsTable.removeViewAt(0);

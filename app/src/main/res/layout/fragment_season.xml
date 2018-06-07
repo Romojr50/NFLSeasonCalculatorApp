@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="season.nfl.nflseasoncalculatorapp.fragments.SeasonFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -131,10 +130,17 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
 
+                <Button
+                    android:id="@+id/exportSeasonsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/export_seasons"
+                    android:visibility="invisible" />
+
                 <HorizontalScrollView
                     android:id="@+id/simulateScroll"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
+                    android:layout_height="wrap_content"
                     android:visibility="invisible">
 
                     <LinearLayout
@@ -146,6 +152,7 @@
                             android:id="@+id/simulateSeasonsLabelTable"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp">
+
                             <TableRow
                                 android:id="@+id/simulateSeasonsLabels"
                                 android:layout_width="match_parent"
