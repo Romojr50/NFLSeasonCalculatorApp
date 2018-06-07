@@ -28,7 +28,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
     private static final double NUMBER_OF_HUNDRED_SIMULATIONS = 20.0;
 
-    private static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
+    public static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
 
     private final float scale;
 
