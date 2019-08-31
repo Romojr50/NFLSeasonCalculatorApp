@@ -3,10 +3,13 @@ package season.nfl.nflseasoncalculatorapp.fragments;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +23,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import nfl.season.input.NFLFileWriterFactory;
 import nfl.season.league.League;
 import nfl.season.league.Team;
 import nfl.season.season.NFLSeason;
+import nfl.season.season.NFLSeasonSheet;
 import nfl.season.season.SeasonGame;
 import nfl.season.season.SeasonWeek;
 import season.nfl.nflseasoncalculatorapp.MainActivity;
@@ -48,6 +54,10 @@ public class SeasonFragment extends Fragment {
     private NFLSeason season;
 
     private String folderPath;
+
+    private String seasonEstimatesFolderPath;
+
+    private Context context;
 
     public SeasonFragment() {
         // Required empty public constructor
@@ -92,6 +102,7 @@ public class SeasonFragment extends Fragment {
         setUpPickWeekSpinner(activity);
         setViewWeekButton(activity);
         setSimulateSeasonsButton(activity);
+        setExportSeasonsButton(activity);
     }
 
     @Override
@@ -100,6 +111,9 @@ public class SeasonFragment extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             File fileDir = context.getFilesDir();
             folderPath = fileDir.getAbsolutePath();
+
+            seasonEstimatesFolderPath = fileDir.getAbsolutePath();
+            this.context = context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -201,9 +215,39 @@ public class SeasonFragment extends Fragment {
         });
     }
 
-    private void addGameRowsToWeekTable(SeasonWeek selectedWeek, TableLayout weekTable, Activity activity) {
-        Resources resources = activity.getResources();
+    private void setExportSeasonsButton(final Activity activity) {
+        Button simulateSeasonsButton = (Button) activity.findViewById(R.id.exportSeasonsButton);
+        simulateSeasonsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setData(Uri.parse("mailto:"));
+                emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "NFLSeasonCalculator Season Estimates");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Season Estimates attached.");
 
+                NFLFileWriterFactory fileWriterFactory = new NFLFileWriterFactory();
+                NFLSeasonSheet seasonSheet = new NFLSeasonSheet(fileWriterFactory);
+
+                try {
+                    seasonSheet.createSeasonEstimatesFile(seasonEstimatesFolderPath, season, (int) SimulateSeasonTask.NUMBER_OF_SIMULATIONS);
+                    String filePath = fileWriterFactory.getSeasonEstimatesFilepath(folderPath);
+                    File sheetFile = new File(filePath);
+                    Uri path = FileProvider.getUriForFile(context, "season.nfl.nflseasoncalculatorapp.fileprovider", sheetFile);
+                    emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+                    emailIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    startActivity(emailIntent);
+                } catch (IOException ioex) {
+                    MessageDisplayer.displayMessage(activity, "Error creating Season Estimates xlsx file.");
+                } catch (android.content.ActivityNotFoundException ex) {
+                    MessageDisplayer.displayMessage(activity, "There is no email client installed.");
+                }
+            }
+        });
+    }
+
+    private void addGameRowsToWeekTable(SeasonWeek selectedWeek, TableLayout weekTable, Activity activity) {
         List<SeasonGame> games = selectedWeek.getSeasonGames();
         for (SeasonGame game : games) {
             TableRow gameRow = new TableRow(activity);
@@ -212,10 +256,13 @@ public class SeasonFragment extends Fragment {
             awayTeamText.setText(game.getAwayTeam().getName());
             gameRow.addView(awayTeamText);
 
-            TextView homeTeamText = new TextView(activity);
-            homeTeamText.setText(game.getHomeTeam().getName());
-            homeTeamText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+            TextView awayScoreText = createTextViewWithPadding(activity, "" + game.getAwayScore());
+            gameRow.addView(awayScoreText);
+
+            TextView homeTeamText = createTextViewWithPadding(activity, game.getHomeTeam().getName());
             gameRow.addView(homeTeamText);
+            TextView homeScoreText = createTextViewWithPadding(activity, "" + game.getHomeScore());
+            gameRow.addView(homeScoreText);
 
             addWinnerToGameRow(activity, game, gameRow);
 
@@ -224,21 +271,22 @@ public class SeasonFragment extends Fragment {
     }
 
     private void addWinnerToGameRow(Activity activity, SeasonGame game, TableRow gameRow) {
-        Resources resources = activity.getResources();
-
         Team winner = game.getWinner();
         if (winner != null) {
-            TextView winnerText = new TextView(activity);
-            winnerText.setText(winner.getName());
-            winnerText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+            TextView winnerText = createTextViewWithPadding(activity, winner.getName());
             gameRow.addView(winnerText);
         } else {
             if (game.wasATie()) {
-                TextView tieText = new TextView(activity);
-                tieText.setText(resources.getString(R.string.tie));
-                tieText.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+                TextView tieText = createTextViewWithPadding(activity, "Tie");
                 gameRow.addView(tieText);
             }
         }
+    }
+
+    private TextView createTextViewWithPadding(Activity activity, String text) {
+        TextView textView = new TextView(activity);
+        textView.setText(text);
+        textView.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+        return textView;
     }
 }

@@ -28,7 +28,9 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
     private static final double NUMBER_OF_HUNDRED_SIMULATIONS = 20.0;
 
-    private static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
+    public static final double NUMBER_OF_SIMULATIONS = NUMBER_OF_HUNDRED_SIMULATIONS * 100.0;
+
+    private final float scale;
 
     private ProgressBar progressBar;
 
@@ -42,6 +44,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         this.progressBar = progressBar;
         this.activity = activity;
         this.simulateSeasonsTable = simulateSeasonsTable;
+        scale = activity.getApplicationContext().getResources().getDisplayMetrics().density;
     }
 
     @Override
@@ -78,9 +81,11 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
         HorizontalScrollView simulateScroll = (HorizontalScrollView) activity.findViewById(R.id.simulateScroll);
         simulateScroll.setVisibility(View.VISIBLE);
+        View exportSeasonsButton = activity.findViewById(R.id.exportSeasonsButton);
+        exportSeasonsButton.setVisibility(View.VISIBLE);
 
-        while(simulateSeasonsTable.getChildCount() > 1) {
-            simulateSeasonsTable.removeViewAt(1);
+        while(simulateSeasonsTable.getChildCount() > 0) {
+            simulateSeasonsTable.removeViewAt(0);
         }
 
         League nfl = season.getLeague();
@@ -110,6 +115,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
 
             TextView teamLabel = new TextView(activity);
             teamLabel.setText(teamName);
+            teamLabel.setWidth((int) (90 * scale + 0.5f));
             teamRow.addView(teamLabel);
 
             addCellsToRow(seasonTeam, teamRow);
@@ -146,6 +152,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         String percentText = getPercentText(value);
         percentLabel.setText(percentText);
         percentLabel.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+        percentLabel.setWidth((int) (60 * scale + 0.5f));
         teamRow.addView(percentLabel);
     }
 
@@ -154,6 +161,7 @@ public class SimulateSeasonTask extends AsyncTask<NFLSeason, Integer, String> {
         String percentText = getPercentTextFromPercent(value);
         percentLabel.setText(percentText);
         percentLabel.setPadding(MainActivity.tablePaddingInPx, 0, 0, 0);
+        percentLabel.setWidth((int) (60 * scale + 0.5f));
         teamRow.addView(percentLabel);
     }
 
