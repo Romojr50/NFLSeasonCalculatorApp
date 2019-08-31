@@ -99,13 +99,13 @@
     </string>
     <string name="power_rankings_text">
         Rankings of all 32 teams. Matchup Calculations based off Power Rankings use an algorithm found by examining wins and losses of several different teams per year from top to bottom for the past 10 years.
-        \n\nThe default Power Rankings are based off several published Power Rankings from post-draft 2018.
+        \n\nThe default Power Rankings are based off several published Power Rankings from post-draft 2019.
     </string>
     <string name="elo_ratings_text">
         A score to be assigned to each team as a measure of how good that team is. Full details on Elo Ratings can be found on Wikipedia or FiveThirtyEight, including how to calculate win chances for two teams based on their Elo Ratings.
         \n\nA brief summary: the average team has a score of 1,500. After every game the winner gains points and the loser loses points based on the final score and whether or not it was an upset.
         \n\nSee the "Sample Elo Ratings" section for some ideas on where to start for your own Elo Ratings.
-        \n\nThe default Elo Ratings are about what FiveThirtyEight will have to start the 2018 season. It is based primarily on how each team finished last year. The main difference is that, to account offseason changes and moves, FiveThirtyEight shrinks each team\'s score back towards 1,500. This results in less extreme win chances (better teams having lower chances to beat worse teams) as at the beginning of the season it is less likely we truly know who the good teams are.
+        \n\nThe default Elo Ratings are about what FiveThirtyEight will have to start the 2019 season. It is based primarily on how each team finished last year. The main difference is that, to account offseason changes and moves, FiveThirtyEight shrinks each team\'s score back towards 1,500. This results in less extreme win chances (better teams having lower chances to beat worse teams) as at the beginning of the season it is less likely we truly know who the good teams are.
     </string>
     <string name="home_field_advantage_text">
         Represents the team\'s home field advantage (HFA). A team\'s home win chance is 1/4 their HFA + 1/4 their opponent\'s HFA. This represents HFA as being both a team playing better at their home field and playing worse on the road.
